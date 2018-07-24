@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>Graph Visual</title>
+    <style>
+      .links line {
+        stroke: #999;
+        stroke-opacity: 0.6;
+      }
+
+      .nodes circle {
+        stroke: #fff;
+        stroke-width: 1.5px;
+      }
+
+      text {
+        font-family: sans-serif;
+        font-size: 10px;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <h1>Radisk Graph</h1>
+    <svg width="960" height="600"></svg>
+
+  </body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="node_modules/gun/examples/jquery.js"></script>
+  <script src="node_modules/gun/gun.js"></script>
+  <script src="node_modules/gun/lib/radix.js"></script>
+  <script src="node_modules/gun/lib/radisk.js"></script>
+  <script src="node_modules/gun/lib/store.js"></script>
+  <script src="node_modules/gun/lib/open.js"></script>
+  <script src="node_modules/gun/lib/load.js"></script>
+
+  <script type="text/javascript">
+  localStorage.clear();
+
+  function Store(opt){
+    opt = opt || {};
+    opt.file = String(opt.file || 'radata');
+    var storage = {};
+    var store = function Store(){};
+    store.put = function(file, data, cb){
+      storage[file] = data
+      cb(undefined, 1)
+    };
+    store.get = function(file, cb){
+      var temp = storage[file] || undefined
+      cb(temp)
+    };
+    store.list = function(cb, match){
+      var arr = Object.entries(storage)[0];
+      Gun.obj.map(arr, cb) || cb();
+    };
+    return store;
+  }
+
+  var gun = Gun({localStorage: false, store: Store()});
+
+  var app = gun.get('app').put({name:'app'})
+  var test1 = app.get('test1').put({name:'test1'})
+  var test2 = app.get('test2').put({name:'test2'})
+  var down1 = test1.get('down1').put({name:'down1'})
+  test2.get('down1').put(down1)
+  </script>
+  <script src="gunutil.js"></script>
+  <script>
+
+  var graph = {};
+
+  gun.get('app').load(explore.bind(this, graph));
+
+
+
+  function dragstarted(d) {
+    console.log('fired');
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(d) {
+    console.log('fired');
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  }
+
+  function dragended(d) {
+    console.log('fired');
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+
+  //d3.select("svg").selectAll("*").remove();
+  var svg = d3.select("svg"),
+       width = +svg.attr("width"),
+       height = +svg.attr("height");
+
+  var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+  var simulation = d3.forceSimulation()
+                   .force("link", d3.forceLink().id(function(d) { return d.id; }))
+                   .force("charge", d3.forceManyBody())
+                   .force("center", d3.forceCenter(width / 2, height / 2));
+
+function update(graph){
+
+  var link = svg.append("g")
+                .attr("class", "links")
+                .selectAll("line")
+                .data(graph.edges)
+                .enter().append("line");
+
+   var node = svg.append("g")
+                 .attr("class", "nodes")
+                 .selectAll("circle")
+                 .data(graph.nodes)
+                 .enter().append("circle")
+                 .attr("r", 2.5)
+                 .call(d3.drag())
+                 .on("start", dragstarted)
+                 .on("drag", dragged)
+                 .on("end", dragended);
+
+   var labels = node.append("text")
+                    .text(function(d) {
+                      return d.id;
+                    })
+                    .attr('x', 6)
+                    .attr('y', 3);
+
+   node.append("title")
+       .text(function(d) { return d.id; });
+
+   simulation.nodes(graph.nodes)
+             .on("tick", ticked.bind(this, link, node));
+
+   simulation.force("link")
+             .links(graph.edges);
+
+   function ticked(link, node) {
+     link.attr("x1", function(d) { return d.source.x; })
+         .attr("y1", function(d) { return d.source.y; })
+         .attr("x2", function(d) { return d.target.x; })
+         .attr("y2", function(d) { return d.target.y; });
+
+     node.attr("transform", function(d) {
+           return "translate(" + d.x + "," + d.y + ")";
+         })
+   }
+}
+
+
+  </script>
+</html>
