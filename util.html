@@ -39,11 +39,11 @@
 
   <script type="text/javascript">
   localStorage.clear();
-
+  var storage = {};
   function Store(opt){
     opt = opt || {};
     opt.file = String(opt.file || 'radata');
-    var storage = {};
+
     var store = function Store(){};
     store.put = function(file, data, cb){
       storage[file] = data
@@ -59,8 +59,8 @@
     };
     return store;
   }
-
-  var gun = Gun({localStorage: false, store: Store()});
+  var peers = ['http://localhost:8080/gun']
+  var gun = Gun({peers:peers,localStorage: false, store: Store()});
 
   var app = gun.get('app').put({name:'app'})
   var test1 = app.get('test1').put({name:'test1'})
@@ -74,7 +74,6 @@
   var graph = {};
 
   gun.get('app').load(explore.bind(this, graph));
-
 
 
   function dragstarted(d) {
@@ -97,7 +96,7 @@
     d.fy = null;
   }
 
-  //d3.select("svg").selectAll("*").remove();
+
   var svg = d3.select("svg"),
        width = +svg.attr("width"),
        height = +svg.attr("height");
@@ -109,8 +108,8 @@
                    .force("charge", d3.forceManyBody())
                    .force("center", d3.forceCenter(width / 2, height / 2));
 
-function update(graph){
-
+function update (graph){
+  d3.select("svg").selectAll("*").remove();
   var link = svg.append("g")
                 .attr("class", "links")
                 .selectAll("line")
@@ -119,14 +118,17 @@ function update(graph){
 
    var node = svg.append("g")
                  .attr("class", "nodes")
-                 .selectAll("circle")
+                 .selectAll("g")
                  .data(graph.nodes)
-                 .enter().append("circle")
-                 .attr("r", 2.5)
-                 .call(d3.drag())
-                 .on("start", dragstarted)
-                 .on("drag", dragged)
-                 .on("end", dragended);
+                 .enter().append("g");
+
+  var circles = node.append("circle")
+                    .attr("r", 3)
+                    .attr("fill","light blue")
+                    .call(d3.drag())
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended);
 
    var labels = node.append("text")
                     .text(function(d) {

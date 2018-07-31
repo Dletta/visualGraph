@@ -43,7 +43,8 @@ function exhausted(node,edges,opt) {
   var i = 0;
   var l = arr.length;
   for(;i<l;i++){
-    if(arr[i] !== 'name'){
+    if(typeof(node[arr[i]]) !== 'string'){
+      console.log(arr[i]);
       if(!edges.has(node.name+arr[i])){
         var temp = arr[i];
         break;
