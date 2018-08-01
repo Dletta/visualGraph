@@ -40,11 +40,13 @@ function makeEdges(map) {
 function exhausted(node,edges,opt) {
   var temp;
   var arr = Object.keys(node);
+  console.log('keys',arr)
   var i = 0;
   var l = arr.length;
   for(;i<l;i++){
     if(typeof(node[arr[i]]) !== 'string'){
-      console.log(arr[i]);
+      console.log('object:',node[arr[i]]);
+      if
       if(!edges.has(node.name+arr[i])){
         var temp = arr[i];
         break;
@@ -88,9 +90,13 @@ function explore(graph,node, key) {
     y = u;
     do{
       console.log('looking for parent');
-      var y = stack.pop()
       printArr(stack)
-    }while(stack.length>0 && exhausted(y,edges))
+      var y = stack.pop();
+
+    }while(stack.length>0 || exhausted(y,edges))
+    if(!exhausted(y,edges)){
+      stack.push(y)
+    }
     u = y;
     console.log(`found ${u.name}`);
   }
