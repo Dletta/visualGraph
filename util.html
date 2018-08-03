@@ -59,7 +59,7 @@
     };
     return store;
   }
-  var peers = ['http://localhost:8080/gun']
+  var peers = ['http://localhost:8080/gun'/*'https://notabug.io/gun'*/]
   var gun = Gun({peers:peers,localStorage: false, store: Store()});
 
   var app = gun.get('app').put({name:'app'})
@@ -110,6 +110,17 @@
 
 function update (graph){
   d3.select("svg").selectAll("*").remove();
+  var svg = d3.select("svg"),
+       width = +svg.attr("width"),
+       height = +svg.attr("height");
+
+  var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+  var simulation = d3.forceSimulation()
+                   .force("link", d3.forceLink().id(function(d) { return d.id; }))
+                   .force("charge", d3.forceManyBody())
+                   .force("center", d3.forceCenter(width / 2, height / 2));
+
   var link = svg.append("g")
                 .attr("class", "links")
                 .selectAll("line")
