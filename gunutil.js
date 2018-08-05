@@ -38,7 +38,6 @@ function makeEdges(map) {
 }
 
 function exhausted(node,edges,opt) {
-  console.log(`is ${node.name} exhausted?`);
   var temp;
   var arr = Object.keys(node);
   var i = 0;
@@ -64,7 +63,7 @@ function exhausted(node,edges,opt) {
   }
 }
 
-function explore(graph,node, key) {
+function explore(graph, cb, node, key) {
   var stack = [];
   var nodes = new Map();
   var edges = new Map();
@@ -77,30 +76,23 @@ function explore(graph,node, key) {
     while(!exhausted(u, edges)){
       var edge = exhausted(u, edges, true);
       var v = u[edge];
-      console.log('v is',v.name);
       nodes.set(v.name, {id:v.name});
       edges.set(u.name+v.name, {source:u.name,target:v.name})
       stack.push(v)
       u = v;
-      console.log('going down');
-      printArr(stack);
     }
     var y = u;
     while(!(stack.length==0)){
-      console.log('looking for parent');
       y = stack.pop();
-      console.log(`checking ${y.name}`);
       printArr(stack);
       if(!exhausted(y,edges)){
         stack.push(y)
         u = y;
-        console.log(`found ${u.name}`);
         break;
       }
     }
   }while(!(stack.length==0))
-
+  console.log('done');
   graph.nodes = makeNodes(nodes);
   graph.edges = makeEdges(edges);
-  update(graph);
 }
