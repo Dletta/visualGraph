@@ -67,7 +67,7 @@
     };
     return store;
   }
-  var peers = ['http://localhost:8080/gun'/*'https://notabug.io/gun'*/]
+  var peers = ['http://localhost:8080/gun','https://notabug.io/gun']
   var gun = Gun({peers:peers,localStorage: false, store: Store()});
 
   var app = gun.get('app').put({name:'app'})
@@ -80,8 +80,6 @@
   <script>
 
   var graph = {};
-
-  gun.get('app').load(explore.bind(this, graph));
 
 
   function dragstarted(d) {
@@ -118,9 +116,9 @@
 
   var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-  var simulation = d3.forceSimulation(graph.nodes);
+  var simulation = d3.forceSimulation();
   simulation.force("charge", d3.forceManyBody());
-  simulation.force("link", d3.forceLink(graph.edges).id((d)=>{return d.id}));
+  simulation.force("link", d3.forceLink().id(function(d) { return d.id; }));
   simulation.force("center", d3.forceCenter(width/2,height/2));
 
 function update () {
@@ -130,7 +128,7 @@ function update () {
   var node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.nodes).enter()
                 .append("circle").attr("r", 2.5).attr('fill', 'red').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended));
   node.append("title").text((d)=>{return d.id;});
-  var label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{return d.id}).attr('x', (d)=>{return d.x});
+  var label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{return d.label}).attr('x', (d)=>{return d.x});
   simulation.nodes(graph.nodes).on("tick", ticked);
   simulation.force("link").links(graph.edges);
   simulation.restart();

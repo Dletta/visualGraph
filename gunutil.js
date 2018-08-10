@@ -1,3 +1,7 @@
+function print(node, key){
+  console.log(key,node);
+}
+
 function printMap(map){
   var array = Array.from(map);
   var i =0;
@@ -95,4 +99,81 @@ function explore(graph, cb, node, key) {
   console.log('done');
   graph.nodes = makeNodes(nodes);
   graph.edges = makeEdges(edges);
+  cb();
+}
+
+
+var stack;
+var nodes;
+var edges;
+var start;
+var u;
+var label;
+
+
+function startTrav(soul, string){
+  start = soul;
+  label = string;
+  stack = [];
+  nodes = new Map();
+  edges = new Map();
+  gun.get(soul).once(traversal)
+}
+
+function traversal(node, key){
+  var soul = node['_']['#'];
+  if(soul == start){
+    stack.push(soul);
+  }
+  u = node;
+  nodes.set(soul, {id:soul,label:node[label]})
+  tExhausted(u, edges);
+}
+
+function tExhausted(node, edges){
+  var temp;
+  var tLabel = 'none';
+  var arr = Object.keys(node);
+  console.log(node);
+  var i = 1;
+  var l = arr.length;
+  for(;i<l;i++){
+    if(arr[i] == label) { tLabel = node[arr[i]] }
+    if(typeof(node[arr[i]]) !== 'string'){
+      if(!edges.has(node['_']['#']+node[arr[i]]['#'])){
+        var temp = node[arr[i]];
+        break;
+      }
+    }
+  }
+  if(temp){
+    tStep(temp, node['_']['#'],temp['#'], tLabel);
+  } else {
+    if(start == node['_']['#']) {stack.pop()}
+    tFinal();
+  }
+}
+
+function tStep (next, edgeS, edgeT, tLabel) {
+  console.log('step',tLabel);
+  var v = next;
+  var soul = v['#'];
+  nodes.set(soul, {id:soul,label:tLabel})
+  edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
+  stack.push(soul)
+  u = v;
+  gun.get(soul).once(traversal)
+}
+
+function tFinal () {
+  if(!(stack.length == 0)){
+    soul = stack.pop();
+    console.log('found',soul);
+    gun.get(soul).once(traversal)
+  } else {
+    console.log('done');
+    graph.nodes = makeNodes(nodes);
+    graph.edges = makeEdges(edges);
+    update();
+  }
 }
