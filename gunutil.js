@@ -109,11 +109,12 @@ var edges;
 var start;
 var u;
 var label;
+var stop = false;
 
 
 function startTrav(soul, string){
   start = soul;
-  label = string;
+  label = string || soul;
   stack = [];
   nodes = new Map();
   edges = new Map();
@@ -121,7 +122,8 @@ function startTrav(soul, string){
 }
 
 function traversal(node, key){
-  var soul = node['_']['#'];
+  if(!node){console.log('missing:',key, node); tFinal();}
+  var soul = node['_']['#'] || node['#'];
   if(soul == start){
     stack.push(soul);
   }
@@ -131,31 +133,32 @@ function traversal(node, key){
 }
 
 function tExhausted(node, edges){
+  if(stop){console.log('stopped');return;}
   var temp;
+  var soul = node['_']['#'] || node['#'];
   var tLabel = 'none';
   var arr = Object.keys(node);
-  console.log(node);
   var i = 1;
   var l = arr.length;
   for(;i<l;i++){
     if(arr[i] == label) { tLabel = node[arr[i]] }
-    if(typeof(node[arr[i]]) !== 'string'){
-      if(!edges.has(node['_']['#']+node[arr[i]]['#'])){
+    if(!tLabel) { tLabel = 'Node'}
+    if(typeof(node[arr[i]]) == 'object' && node[arr[i]] != null){
+      if(!edges.has(soul+node[arr[i]]['#'])){
         var temp = node[arr[i]];
         break;
       }
     }
   }
   if(temp){
-    tStep(temp, node['_']['#'],temp['#'], tLabel);
+    tStep(temp, soul,temp['#'], tLabel);
   } else {
-    if(start == node['_']['#']) {stack.pop()}
+    if(start == soul) {stack.pop()}
     tFinal();
   }
 }
 
 function tStep (next, edgeS, edgeT, tLabel) {
-  console.log('step',tLabel);
   var v = next;
   var soul = v['#'];
   nodes.set(soul, {id:soul,label:tLabel})
@@ -168,12 +171,17 @@ function tStep (next, edgeS, edgeT, tLabel) {
 function tFinal () {
   if(!(stack.length == 0)){
     soul = stack.pop();
-    console.log('found',soul);
     gun.get(soul).once(traversal)
   } else {
-    console.log('done');
     graph.nodes = makeNodes(nodes);
     graph.edges = makeEdges(edges);
     update();
   }
+}
+
+function doIt () {
+  console.log('done');
+  graph.nodes = makeNodes(nodes);
+  graph.edges = makeEdges(edges);
+  update();
 }
