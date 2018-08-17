@@ -114,7 +114,7 @@ var stop = false;
 
 function startTrav(soul, string){
   start = soul;
-  label = string || soul;
+  label = string;
   stack = [];
   nodes = new Map();
   edges = new Map();
@@ -142,7 +142,6 @@ function tExhausted(node, edges){
   var l = arr.length;
   for(;i<l;i++){
     if(arr[i] == label) { tLabel = node[arr[i]] }
-    if(!tLabel) { tLabel = 'Node'}
     if(typeof(node[arr[i]]) == 'object' && node[arr[i]] != null){
       if(!edges.has(soul+node[arr[i]]['#'])){
         var temp = node[arr[i]];
@@ -161,7 +160,7 @@ function tExhausted(node, edges){
 function tStep (next, edgeS, edgeT, tLabel) {
   var v = next;
   var soul = v['#'];
-  nodes.set(soul, {id:soul,label:tLabel})
+  nodes.set(soul, {id:soul,label:v['#']})
   edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
   stack.push(soul)
   u = v;
