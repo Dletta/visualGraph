@@ -75,7 +75,6 @@ function explore(graph, cb, node, key) {
   var start = node;
   var u = node;
   stack.push(u)
-  printArr(stack)
   do{
     while(!exhausted(u, edges)){
       var edge = exhausted(u, edges, true);
@@ -88,7 +87,6 @@ function explore(graph, cb, node, key) {
     var y = u;
     while(!(stack.length==0)){
       y = stack.pop();
-      printArr(stack);
       if(!exhausted(y,edges)){
         stack.push(y)
         u = y;
@@ -122,13 +120,13 @@ function startTrav(soul, string){
 }
 
 function traversal(node, key){
-  if(!node){console.log('missing:',key, node); tFinal();}
+  if(!node){console.log('missing:',key, node); tFinal();return;}
   var soul = node['_']['#'] || node['#'];
   if(soul == start){
     stack.push(soul);
   }
   u = node;
-  nodes.set(soul, {id:soul,label:node[label]})
+  nodes.set(soul, {id:soul,label:key})
   tExhausted(u, edges);
 }
 
@@ -164,6 +162,7 @@ function tStep (next, edgeS, edgeT, tLabel) {
   edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
   stack.push(soul)
   u = v;
+  if(nodes.size >= 1000){console.log('Reached limit');doIt();return;}
   gun.get(soul).once(traversal)
 }
 
@@ -172,9 +171,7 @@ function tFinal () {
     soul = stack.pop();
     gun.get(soul).once(traversal)
   } else {
-    graph.nodes = makeNodes(nodes);
-    graph.edges = makeEdges(edges);
-    update();
+    doIt();
   }
 }
 

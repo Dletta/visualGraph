@@ -39,7 +39,7 @@
   <script src="node_modules/gun/lib/load.js"></script>
 
   <script type="text/javascript">
-  localStorage.clear();
+  /*localStorage.clear();*/
   function Store(opt){
     opt = opt || {};
     opt.file = String(opt.file || 'radata');
@@ -67,14 +67,18 @@
     };
     return store;
   }
-  var peers = ['http://localhost:8080/gun','https://notabug.io/gun']
+
+  var peers = [/*'http://localhost:8080/gun',*/'https://notabug.io/gun']
   var gun = Gun({peers:peers,localStorage: false, store: Store()});
 
-  var app = gun.get('app').put({name:'app'})
+  /*var app = gun.get('app').put({name:'app'})
   var test1 = app.get('test1').put({name:'test1'})
   var test2 = app.get('test2').put({name:'test2'})
+  var test3 = app.get('test3').put({name:'test3'})
   var down1 = test1.get('down1').put({name:'down1'})
   test2.get('down1').put(down1)
+  test1.get('down2').put(test3)
+  app.get('darling').put(test3)*/
   </script>
   <script src="gunutil.js"></script>
   <script>
