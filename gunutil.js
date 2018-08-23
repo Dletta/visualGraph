@@ -109,6 +109,7 @@ var u;
 var label;
 var option = false;
 var stop = false;
+var limit = 300;
 
 
 function startTrav(soul, lbl){
@@ -170,7 +171,7 @@ function tStep (next, edgeS, edgeT, tLabel) {
   edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
   stack.push(soul)
   u = v;
-  if(nodes.size >= 1000){console.log('Reached limit');doIt();return;}
+  if(nodes.size >= limit){console.log('Reached limit');doIt();return;}
   gun.get(soul).once(traversal)
 }
 
