@@ -107,12 +107,15 @@ var edges;
 var start;
 var u;
 var label;
+var option = false;
 var stop = false;
 
 
-function startTrav(soul, string){
+function startTrav(soul, lbl){
+  console.log('Starting with:',soul);
+  if(lbl){option = true;} else { option = false;}
+  label = lbl;
   start = soul;
-  label = string;
   stack = [];
   nodes = new Map();
   edges = new Map();
@@ -126,7 +129,12 @@ function traversal(node, key){
     stack.push(soul);
   }
   u = node;
-  nodes.set(soul, {id:soul,label:key})
+  if(!option){
+    nodes.set(soul, {id:soul,label:key})
+  } else {
+    nodes.set(soul, {id:soul,label:node[label]})
+  }
+
   tExhausted(u, edges);
 }
 

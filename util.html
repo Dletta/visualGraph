@@ -25,7 +25,7 @@
   <body>
 
     <h1>Radisk Graph</h1>
-    <button type="button" name="button" onclick="getData()">Get Graph</button>
+    <button type="button" name="button" onclick="startTrav(window.prompt('Key of Root'))">Get Graph</button>
     <svg width="960" height="600"></svg>
 
   </body>
@@ -68,17 +68,10 @@
     return store;
   }
 
-  var peers = [/*'http://localhost:8080/gun',*/'https://notabug.io/gun']
+  var peers = ['http://localhost:8080/gun','https://notabug.io/gun']
   var gun = Gun({peers:peers,localStorage: false, store: Store()});
 
-  /*var app = gun.get('app').put({name:'app'})
-  var test1 = app.get('test1').put({name:'test1'})
-  var test2 = app.get('test2').put({name:'test2'})
-  var test3 = app.get('test3').put({name:'test3'})
-  var down1 = test1.get('down1').put({name:'down1'})
-  test2.get('down1').put(down1)
-  test1.get('down2').put(test3)
-  app.get('darling').put(test3)*/
+
   </script>
   <script src="gunutil.js"></script>
   <script>
@@ -121,7 +114,7 @@
   var color = d3.scaleOrdinal(d3.schemeCategory10);
 
   var simulation = d3.forceSimulation();
-  simulation.force("charge", d3.forceManyBody());
+  simulation.force("charge", d3.forceManyBody().strength(-300));
   simulation.force("link", d3.forceLink().id(function(d) { return d.id; }));
   simulation.force("center", d3.forceCenter(width/2,height/2));
 
@@ -152,9 +145,7 @@ function update () {
   }
 };
 
-function getData () {
-  gun.get('app').load(explore.bind(this, graph, update));
-}
+
 
 
 
