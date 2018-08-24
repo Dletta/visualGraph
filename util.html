@@ -31,12 +31,13 @@
   </body>
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="node_modules/gun/examples/jquery.js"></script>
-  <script src="node_modules/gun/gun.js"></script>
+  <!--<script src="node_modules/gun/gun.js"></script>-->
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
   <script src="node_modules/gun/lib/radix.js"></script>
   <script src="node_modules/gun/lib/radisk.js"></script>
   <script src="node_modules/gun/lib/store.js"></script>
-  <script src="node_modules/gun/lib/open.js"></script>
-  <script src="node_modules/gun/lib/load.js"></script>
+
+
 
   <script type="text/javascript">
   /*localStorage.clear();*/
@@ -46,7 +47,7 @@
     var storage = window.storage = localStorage;//{};
     var store = function Store(){}, u;
     store.put = function(file, data, cb){
-      //console.log("put", file, data);
+      console.log("put", file, data);
       setTimeout(function(){
         storage[file] = data;
         cb(null, 1);
@@ -69,7 +70,7 @@
   }
 
   var peers = ['http://localhost:8080/gun','https://notabug.io/gun']
-  var gun = Gun({peers:peers,localStorage: false, store: Store()});
+  var gun = Gun({peers:peers, store: Store()});
 
 
   </script>

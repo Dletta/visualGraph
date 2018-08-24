@@ -124,6 +124,7 @@ function startTrav(soul, lbl){
 }
 
 function traversal(node, key){
+  console.log('called', nodes.size);
   if(!node){console.log('missing:',key, node); tFinal();return;}
   var soul = node['_']['#'] || node['#'];
   if(soul == start){
