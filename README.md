@@ -1,8 +1,11 @@
 # visualGraph
 Gun Utility to Traverse Graph and use d3.js to visualize
 
-You need to use gun.get(aRootNode).load(explore.bind(this,graph)) to start exploring the node and graph from any given root.
-graph is a global object that keeps the nodes and edges register that d3 needs to generate a force-directed graph.
+Run your node.js super-peer, open the util.html (modify the peer to include only your peer's address)
+then open the console in the website and type startTrav(yourRootNodeKey)
+that will start traversing the graph
+after it is complete the graph will showstart exploring the node and graph from any given root.
+Graph is a global object that keeps the nodes and edges register that d3 needs to generate a force-directed graph.
 
 The exploration Algorithm is a depth-first search, with while loops (big datasets may take a while), this is still very much beta
 , but it worked well on a small 4 node graph with interdependence and a random 100 test nodes connected to the root node.
