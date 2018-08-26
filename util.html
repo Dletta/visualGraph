@@ -24,8 +24,10 @@
   </head>
   <body>
 
-    <h1>Radisk Graph</h1>
-    <button type="button" name="button" onclick="startTrav(window.prompt('Key of Root'))">Get Graph</button>
+    <h1>Visual Graph Representation</h1>
+    Initial Soul/Key:
+    <input type="text" id="key" value=""><br>
+    <button type="button" name="button" onclick="startTrav(document.getElementById('key').value)">DFS Graph</button>
     <svg width="960" height="600"></svg>
 
   </body>
@@ -40,14 +42,14 @@
 
 
   <script type="text/javascript">
-  /*localStorage.clear();*/
+  localStorage.clear();
   function Store(opt){
     opt = opt || {};
     opt.file = String(opt.file || 'radata');
     var storage = window.storage = localStorage;//{};
     var store = function Store(){}, u;
     store.put = function(file, data, cb){
-      console.log("put", file, data);
+      //console.log("put", file, data);
       setTimeout(function(){
         storage[file] = data;
         cb(null, 1);
@@ -70,7 +72,7 @@
   }
 
   var peers = ['http://localhost:8080/gun','https://notabug.io/gun']
-  var gun = Gun({peers:peers, store: Store()});
+  var gun = Gun({peers:peers, localStorage: false, radisk:false/*, store: Store()*/});
 
 
   </script>
@@ -111,6 +113,17 @@
   var svg = d3.select("svg"),
   width = +svg.attr("width"),
   height = +svg.attr("height");
+  var link;
+  var node;
+  var label;
+  var zoom = d3.zoom();
+  svg.call(zoom.on("zoom", zoomed));
+
+  function zoomed() {
+  link.attr("transform", d3.event.transform);
+  node.attr("transform", d3.event.transform);
+  label.attr("transform", d3.event.transform);
+  }
 
   var color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -122,11 +135,11 @@
 function update () {
   console.log('updated');
   svg.selectAll('*').remove();
-  var link = svg.append("g").attr("class","links").selectAll("line").data(graph.edges).enter().append("line");
-  var node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.nodes).enter()
+  link = svg.append("g").attr("class","links").selectAll("line").data(graph.edges).enter().append("line");
+  node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.nodes).enter()
                 .append("circle").attr("r", 2.5).attr('fill', 'red').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended));
   node.append("title").text((d)=>{return d.id;});
-  var label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{return d.label}).attr('x', (d)=>{return d.x});
+  label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{return d.label}).attr('x', (d)=>{return d.x});
   simulation.nodes(graph.nodes).on("tick", ticked);
   simulation.force("link").links(graph.edges);
   simulation.restart();

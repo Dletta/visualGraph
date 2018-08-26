@@ -1,5 +1,5 @@
 function print(node, key){
-  console.log(key,node);
+  console.log('printed:',key,node);
 }
 
 function printMap(map){
@@ -125,7 +125,7 @@ function startTrav(soul, lbl){
 
 function traversal(node, key){
   console.log('called', nodes.size);
-  if(!node){console.log('missing:',key, node); tFinal();return;}
+  if(!node){console.log('no data:',key, node); tFinal();return;}
   var soul = node['_']['#'] || node['#'];
   if(soul == start){
     stack.push(soul);
