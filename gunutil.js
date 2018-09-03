@@ -101,47 +101,47 @@ function explore(graph, cb, node, key) {
 }
 
 
-var stack;
-var nodes;
-var edges;
-var start;
-var u;
-var label;
-var option = false;
-var stop = false;
+var dfsStack;
+var dfsNodes;
+var dfsEdges;
+var dfsStart;
+var dfsU;
+var dfsLabel;
+var dfsOption = false;
+var dfsStop = false;
 var limit = 300;
 
 
-function startTrav(soul, lbl){
+function dfs(soul, lbl){
   console.log('Starting with:',soul);
-  if(lbl){option = true;} else { option = false;}
-  label = lbl;
-  start = soul;
-  stack = [];
-  nodes = new Map();
-  edges = new Map();
-  gun.get(soul).once(traversal)
+  if(lbl){dfsOption = true;} else { dfsOption = false;}
+  dfsLabel = lbl;
+  dfsStart = soul;
+  dfsStack = [];
+  dfsNodes = new Map();
+  dfsEdges = new Map();
+  gun.get(soul).once(dfsNode)
 }
 
-function traversal(node, key){
-  console.log('called', nodes.size);
-  if(!node){console.log('no data:',key, node); tFinal();return;}
+function dfsNode(node, key){
+  console.log('called', dfsNodes.size);
+  if(!node){console.log('no data:',key, node); dfsBack();return;}
   var soul = node['_']['#'] || node['#'];
-  if(soul == start){
-    stack.push(soul);
+  if(soul == dfsStart){
+    dfsStack.push(soul);
   }
-  u = node;
-  if(!option){
-    nodes.set(soul, {id:soul,label:key})
+  dfsU = node;
+  if(!dfsOption){
+    dfsNodes.set(soul, {id:soul,label:key})
   } else {
-    nodes.set(soul, {id:soul,label:node[label]})
+    dfsNodes.set(soul, {id:soul,label:node[dfsLabel]})
   }
 
-  tExhausted(u, edges);
+  dfsEdge(dfsU, dfsEdges);
 }
 
-function tExhausted(node, edges){
-  if(stop){console.log('stopped');return;}
+function dfsEdge(node, edges){
+  if(dfsStop){console.log('stopped');return;}
   var temp;
   var soul = node['_']['#'] || node['#'];
   var tLabel = 'none';
@@ -151,43 +151,43 @@ function tExhausted(node, edges){
   for(;i<l;i++){
     if(arr[i] == label) { tLabel = node[arr[i]] }
     if(typeof(node[arr[i]]) == 'object' && node[arr[i]] != null){
-      if(!edges.has(soul+node[arr[i]]['#'])){
+      if(!dfsEdges.has(soul+node[arr[i]]['#'])){
         var temp = node[arr[i]];
         break;
       }
     }
   }
   if(temp){
-    tStep(temp, soul,temp['#'], tLabel);
+    dfsNext(temp, soul,temp['#'], tLabel);
   } else {
-    if(start == soul) {stack.pop()}
-    tFinal();
+    if(dfsStart == soul) {dfsStack.pop()}
+    dfsBack();
   }
 }
 
-function tStep (next, edgeS, edgeT, tLabel) {
+function dfsNext (next, edgeS, edgeT, tLabel) {
   var v = next;
   var soul = v['#'];
-  nodes.set(soul, {id:soul,label:v['#']})
-  edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
-  stack.push(soul)
-  u = v;
-  if(nodes.size >= limit){console.log('Reached limit');doIt();return;}
-  gun.get(soul).once(traversal)
+  dfsNodes.set(soul, {id:soul,label:v['#']})
+  dfsEdges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
+  dfsStack.push(soul)
+  dfsU = v;
+  if(dfsNodes.size >= limit){console.log('Reached limit');render();return;}
+  gun.get(soul).once(dfsNode)
 }
 
-function tFinal () {
-  if(!(stack.length == 0)){
-    soul = stack.pop();
-    gun.get(soul).once(traversal)
+function dfsBack () {
+  if(!(dfsStack.length == 0)){
+    soul = dfsStack.pop();
+    gun.get(soul).once(dfsNode)
   } else {
-    doIt();
+    render();
   }
 }
 
-function doIt () {
+function render () {
   console.log('done');
-  graph.nodes = makeNodes(nodes);
-  graph.edges = makeEdges(edges);
+  graph.nodes = makeNodes(dfsNodes);
+  graph.edges = makeEdges(dfsEdges);
   update();
 }
