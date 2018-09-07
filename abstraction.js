@@ -1,4 +1,4 @@
-
+/* Tuple function */
 
 function tuple (node, verb, object){
   var nodes = gun.get('nodes');
