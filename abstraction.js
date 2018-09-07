@@ -1,3 +1,5 @@
+
+
 function tuple (node, verb, object){
   var nodes = gun.get('nodes');
   var edges = gun.get('edges');
