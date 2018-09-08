@@ -43,7 +43,7 @@ var createEdge = function (label) {
 
 /* Create Index for Nodes and Edges */
 var nodes = gun.get('nodes').put({'__type':'index','__label':'nodesIndex'}); //creates global nodes index, but not write protected
-var edges = gun.get('edges').put({'__type':'index','__label':'nodesIndex'}); //same here
+var edges = gun.get('edges').put({'__type':'index','__label':'edgesIndex'}); //same here
 
 /* Tuple function */
 /* Takes objects or references from Gun to create nodes */

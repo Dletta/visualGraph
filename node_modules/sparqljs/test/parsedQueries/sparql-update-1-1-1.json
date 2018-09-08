@@ -1,0 +1,25 @@
+{
+  "type": "update",
+  "prefixes": {
+    "dc": "http://purl.org/dc/elements/1.1/"
+  },
+  "updates": [
+    {
+      "updateType": "insertdelete",
+      "insert": [
+        {
+          "type": "bgp",
+          "triples": [
+            {
+              "subject": "http://example/egbook",
+              "predicate": "http://purl.org/dc/elements/1.1/title",
+              "object": "\"This is an example title\""
+            }
+          ]
+        }
+      ],
+      "delete": [],
+      "where": []
+    }
+  ]
+}
