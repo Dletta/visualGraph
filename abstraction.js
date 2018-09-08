@@ -56,3 +56,35 @@ var tuple = function (node, verb, object){
   verb.get('target').put(object);
   object.get('in').set(verb);
 }
+
+//Example SPARQL output
+var query = {
+  "type": "query",
+  "prefixes": {
+    "dbpedia-owl": "http://dbpedia.org/ontology/"
+  },
+  "queryType": "SELECT",
+  "variables": [ "?p", "?c" ],
+  "where": [
+    {
+      "type": "bgp",
+      "triples": [
+        {
+          "subject": "?p",
+          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+          "object": "http://dbpedia.org/ontology/Artist"
+        },
+        {
+          "subject": "?p",
+          "predicate": "http://dbpedia.org/ontology/birthPlace",
+          "object": "?c"
+        },
+        {
+          "subject": "?c",
+          "predicate": "http://xmlns.com/foaf/0.1/name",
+          "object": "\"York\"@en"
+        }
+      ]
+    }
+  ]
+}
