@@ -1,0 +1,30 @@
+{
+  "name": "visualgraph",
+  "version": "0.1.0",
+  "description": "Graph Visualizer for Gun dDatabase, Abstraction and Schema",
+  "main": "main.js",
+  "dependencies": {
+    "gun": "^0.9.9998"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dletta/visualGraph.git"
+  },
+  "keywords": [
+    "visualizer",
+    "graph",
+    "data",
+    "schema",
+    "rdf"
+  ],
+  "author": "Jachen Duschletta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dletta/visualGraph/issues"
+  },
+  "homepage": "https://github.com/Dletta/visualGraph#readme"
+}
