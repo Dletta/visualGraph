@@ -1,6 +1,72 @@
-+0#"edges.__
-+1#"label=""edgesIndex>+1536378894857
-+1#"type=""index>+1536378837822
-+0#"nodes.__
-+1#"label=""nodesIndex>+1536378837817
-+1#"type=""index>+1536378837817
++0#"edges.
++1#"__
++2#"label=""edgesIndex>+1536389140846
++2#"type=""index>+1536389140846
++1#"jlt
++2#"1
++3#"u9jm7VWEuw51XzLt="#jlt1u9jm7VWEuw51XzLt>+1536388348225
++3#"witqSjFQDHJ19hZz="#jlt1witqSjFQDHJ19hZz>+1536388316088.001
++2#"28gxyNFAotN6QwEgs="#jlt28gxyNFAotN6QwEgs>+1536388840700.001
++0#"jlt
++1#"1
++2#"qxl0goBhFTtq3nU1.
++3#"__
++4#"label=""Nathan Drake>+1536388002180.001
++4#"type=""node>+1536388002180.001
++3#"in="#jlt28wml01ahmQSaRzKRB6O>+1536388840702.004
++3#"out="#jlt1xnt6IfdF1sephNHO>+1536388348228
++2#"u9jm7VWEuw51XzLt.
++3#"__
++4#"label=""bornIn>+1536388157651
++4#"type=""edge>+1536388157651
++3#"source="#jlt1qxl0goBhFTtq3nU1>+1536388348229
++3#"target="#jlt1vukfywcuidMoVnx1>+1536388348229.002
++2#"vukfywcuidMoVnx1.
++3#"__
++4#"label=""Lincoln>+1536388636358
++4#"type=""node>+1536388231551.001
++3#"in="#jlt1yclxn1bdgjCL8BcU>+1536388348231
++2#"witqSjFQDHJ19hZz.
++3#"__
++4#"label=""ofType>+1536388262991
++4#"type=""edge>+1536388262991
++3#"source="#jlt1qxl0goBhFTtq3nU1>+1536388316091
++3#"target="#jlt1x2g7NhlQCrWKqOSA>+1536388316092
++2#"x
++3#"2g7NhlQCrWKqOSA.
++4#"__
++5#"label=""Artist>+1536388288424
++5#"type=""node>+1536388288424
++4#"in="#jlt1xnt8T0pKVVhCzmd3>+1536388316092.002
++3#"nt
++4#"6IfdF1sephNHO.jlt1
++5#"u9jm7VWEuw51XzLt="#jlt1u9jm7VWEuw51XzLt>+1536388348228
++5#"witqSjFQDHJ19hZz="#jlt1witqSjFQDHJ19hZz>+1536388316090
++4#"8T0pKVVhCzmd3.jlt1witqSjFQDHJ19hZz="#jlt1witqSjFQDHJ19hZz>+1536388316092.002
++2#"yclxn1bdgjCL8BcU.jlt1u9jm7VWEuw51XzLt="#jlt1u9jm7VWEuw51XzLt>+1536388348231
++1#"2
++2#"7v9gqwUdZ3jNc7nH.
++3#"__
++4#"label=""human>+1536388792325
++4#"type=""node>+1536388792325
++3#"out="#jlt28wmkfrX72pGWuhpm>+1536388840700.005
++2#"8
++3#"gxyNFAotN6QwEgs.
++4#"__
++5#"label=""instance Of>+1536388820422.001
++5#"type=""edge>+1536388820422.001
++4#"source="#jlt27v9gqwUdZ3jNc7nH>+1536388840702
++4#"target="#jlt1qxl0goBhFTtq3nU1>+1536388840702.002
++3#"wm
++4#"kfrX72pGWuhpm.jlt28gxyNFAotN6QwEgs="#jlt28gxyNFAotN6QwEgs>+1536388840700.005
++4#"l01ahmQSaRzKRB6O.jlt28gxyNFAotN6QwEgs="#jlt28gxyNFAotN6QwEgs>+1536388840702.004
++0#"nodes.
++1#"__
++2#"label=""nodesIndex>+1536389140845
++2#"type=""index>+1536389140845
++1#"jlt
++2#"1
++3#"qxl0goBhFTtq3nU1="#jlt1qxl0goBhFTtq3nU1>+1536388840700.003
++3#"vukfywcuidMoVnx1="#jlt1vukfywcuidMoVnx1>+1536388348226.001
++3#"x2g7NhlQCrWKqOSA="#jlt1x2g7NhlQCrWKqOSA>+1536388316089.001
++2#"27v9gqwUdZ3jNc7nH="#jlt27v9gqwUdZ3jNc7nH>+1536388840699
