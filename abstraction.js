@@ -15,31 +15,37 @@
 */
 
 /* Schema for Nodes */
-var node = function (label) {
-  var temp = {};
-  temp['__type'] = 'node';
-  temp['__label'] = label;
-  return temp;
+function Node (label) {
+  this.node = function(lbl){
+    var temp = {};
+    temp['__type'] = 'node';
+    temp['__label'] = label;
+    return temp;
+  },
+  this.label = label,
+  this.create = function (){
+    var temp = this.node(this.label);
+    var gunRef = nodes.set(temp);
+    return gunRef;
+  }
 }
 
-var createNode = function (label) {
-  var temp = node(label);
-  var gunRef = nodes.set(temp);
-  return gunRef;
-}
 /* Schema for Edges */
-var edge = function (label) {
-  var temp = {};
-  temp['__type'] = 'edge';
-  temp['__label'] = label;
-  return temp;
+function Edge (label) {
+  this.edge = function(label){
+    var temp = {};
+    temp['__type'] = 'edge';
+    temp['__label'] = label;
+    return temp;
+  },
+  this.label = label,
+  this.create = function (){
+    var temp = this.edge(this.label);
+    var gunRef = edges.set(temp);
+    return gunRef;
+  }
 }
 
-var createEdge = function (label) {
-  var temp = edge(label);
-  var gunRef = edges.set(temp);
-  return gunRef;
-}
 
 /* Create Index for Nodes and Edges */
 var nodes = gun.get('nodes').put({'__type':'index','__label':'nodesIndex'}); //creates global nodes index, but not write protected
@@ -55,6 +61,15 @@ var tuple = function (node, verb, object){
   verb.get('source').put(node);
   verb.get('target').put(object);
   object.get('in').set(verb);
+}
+
+/* BFS Search for Pattern (Query) */
+
+function bfsSearch (pattern) {
+  this.pattern = pattern;
+  this.search = function () {
+
+  }
 }
 
 //Example SPARQL output
