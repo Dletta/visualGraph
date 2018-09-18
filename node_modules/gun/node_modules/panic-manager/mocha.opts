@@ -1,0 +1,3 @@
+--reporter dot
+--compilers babel-register
+--check-leaks

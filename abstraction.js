@@ -54,9 +54,6 @@ var edges = gun.get('edges').put({'__type':'index','__label':'edgesIndex'}); //s
 /* Tuple function */
 /* Takes objects or references from Gun to create nodes */
 var tuple = function (node, verb, object){
-  var node = nodes.set(node);
-  var verb = edges.set(verb);
-  var object = nodes.set(object);
   node.get('out').set(verb);
   verb.get('source').put(node);
   verb.get('target').put(object);
