@@ -62,12 +62,65 @@ var tuple = function (node, verb, object){
 
 /* BFS Search for Pattern (Query) */
 
-function bfsSearch (pattern) {
-  this.pattern = pattern;
-  this.search = function () {
+var bfsPattern = [];
+var bfsResult = [];
 
+var bfsSearch = function(){
+  if(bfsPattern.length > 2) {
+    bfsResult = [];
+    nodes.map().once(bfsStep);
+  } else {
+    throw 'no pattern defined';
   }
 }
+var bfsStep = function(node, key){
+  if(typeof node != 'string'){
+    console.log(`found ${node}`);
+    var soul = node['_']['#'] || node['#'];
+    if(node['__label'] == bfsPattern[0] || bfsPattern[0][0] == '?'){
+      gun.get(soul).get('out').map().once(bfsLook.bind(null,soul))
+    }
+  }
+}
+var bfsLook = function(parent,node, key) {
+  console.log('look',key, node, parent);
+  var soul = node['_']['#'] || node['#'];
+  if(node['__label']==bfsPattern[1] || bfsPattern[1][0] == '?'){
+    var temp = (parent+'__'+soul);
+    gun.get(node.target['#']).once(bfsFind.bind(null,temp));
+  }
+}
+var bfsFind = function(parent, node, key) {
+  console.log('find',key,node, parent);
+  var soul = node['_']['#'] || node['#'];
+  if(node['__label']==bfsPattern[2] || bfsPattern[2][0] == '?'){
+    var temp = (parent+'__'+soul);
+    bfsResult.push(temp)
+  }
+}
+var bfsPrint = function() {
+  if(!bfsResult){
+    console.log('no results');
+    return;
+  } else {
+    var i = 0;
+    var l = bfsResult.length;
+    for(i;i<l;i++){
+      var temp = bfsResult[i];
+      temp = temp.split('__');
+      var y = 0;
+      var l1 = temp.length;
+      for(y;y<l1;y++){
+        gun.get(temp[y]).once(bfsNice);
+      }
+    }
+  }
+}
+var bfsNice = function(node) {
+  console.log(node['__label']);
+}
+bfsPattern = ['?p', 'type', 'Artist'];
+bfsSearch();
 
 //Example SPARQL output
 var query = {
