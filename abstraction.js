@@ -111,13 +111,13 @@ var bfsPrint = function() {
       var y = 0;
       var l1 = temp.length;
       for(y;y<l1;y++){
-        gun.get(temp[y]).once(bfsNice);
+        gun.get(temp[y]).once(bfsNice.bind(null,y));
       }
     }
   }
 }
-var bfsNice = function(node) {
-  console.log(node['__label']);
+var bfsNice = function(item, node) {
+  console.log(item,node['__label']);
 }
 bfsPattern = ['?p', 'type', 'Artist'];
 bfsSearch();

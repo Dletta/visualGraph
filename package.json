@@ -4,7 +4,7 @@
   "description": "Graph Visualizer for Gun dDatabase, Abstraction and Schema",
   "main": "main.js",
   "dependencies": {
-    "gun": "^0.9.9998",
+    "gun": "^0.9.99994",
     "sparqljs": "^2.1.0"
   },
   "devDependencies": {},
