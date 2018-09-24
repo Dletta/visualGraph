@@ -30,6 +30,12 @@ function Node (label) {
   }
 }
 
+function newNode (label) {
+  var temp = new Node(label);
+  temp = temp.create();
+  return temp;
+}
+
 /* Schema for Edges */
 function Edge (label) {
   this.edge = function(label){
@@ -44,6 +50,12 @@ function Edge (label) {
     var gunRef = edges.set(temp);
     return gunRef;
   }
+}
+
+function newEdge (label) {
+  var temp = new Edge(label);
+  temp = temp.create();
+  return temp;
 }
 
 
@@ -75,7 +87,7 @@ var bfsSearch = function(){
 }
 var bfsStep = function(node, key){
   if(typeof node != 'string'){
-    console.log(`found ${node}`);
+    console.log(`found ${JSON.stringify(node)}`);
     var soul = node['_']['#'] || node['#'];
     if(node['__label'] == bfsPattern[0] || bfsPattern[0][0] == '?'){
       gun.get(soul).get('out').map().once(bfsLook.bind(null,soul))
@@ -95,6 +107,7 @@ var bfsFind = function(parent, node, key) {
   var soul = node['_']['#'] || node['#'];
   if(node['__label']==bfsPattern[2] || bfsPattern[2][0] == '?'){
     var temp = (parent+'__'+soul);
+    console.log('pushed',temp);
     bfsResult.push(temp)
   }
 }
