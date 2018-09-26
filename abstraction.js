@@ -15,49 +15,20 @@
 */
 
 /* Schema for Nodes */
-function Node (label) {
-  this.node = function(lbl){
-    var temp = {};
-    temp['__type'] = 'node';
-    temp['__label'] = label;
-    return temp;
-  },
-  this.label = label,
-  this.create = function (){
-    var temp = this.node(this.label);
-    var gunRef = nodes.set(temp);
-    return gunRef;
-  }
-}
-
-function newNode (label) {
-  var temp = new Node(label);
-  temp = temp.create();
-  return temp;
+function newNode(object, label) {
+  object.__label = label;
+  object.__type = 'node';
+  var gunRef = nodes.set(object);
+  return gunRef;
 }
 
 /* Schema for Edges */
-function Edge (label) {
-  this.edge = function(label){
-    var temp = {};
-    temp['__type'] = 'edge';
-    temp['__label'] = label;
-    return temp;
-  },
-  this.label = label,
-  this.create = function (){
-    var temp = this.edge(this.label);
-    var gunRef = edges.set(temp);
-    return gunRef;
-  }
+function newEdge(object, label) {
+  object.__label = label;
+  object.__type = 'edge';
+  var gunRef = edges.set(object);
+  return gunRef;
 }
-
-function newEdge (label) {
-  var temp = new Edge(label);
-  temp = temp.create();
-  return temp;
-}
-
 
 /* Create Index for Nodes and Edges */
 var nodes = gun.get('nodes').put({'__type':'index','__label':'nodesIndex'}); //creates global nodes index, but not write protected
@@ -74,52 +45,59 @@ var tuple = function (node, verb, object){
 
 /* BFS Search for Pattern (Query) */
 
+var Traversal = function(triple){
+  this.subject = triple.subject;
+  this.predicate = triple.predicate;
+  this.object = triple.object;
+  this.result = [];
+}
+
 var bfsPattern = [];
 var bfsResult = [];
 
-var bfsSearch = function(){
-  if(bfsPattern.length > 2) {
-    bfsResult = [];
-    nodes.map().once(bfsStep);
+var bfsSearch = function(obj){
+  if(obj.subject) {
+    nodes.map().once(bfsStep.bind(null,obj));
   } else {
     throw 'no pattern defined';
   }
 }
-var bfsStep = function(node, key){
+var bfsStep = function(obj, node, key){
   if(typeof node != 'string'){
     console.log(`found ${JSON.stringify(node)}`);
     var soul = node['_']['#'] || node['#'];
-    if(node['__label'] == bfsPattern[0] || bfsPattern[0][0] == '?'){
-      gun.get(soul).get('out').map().once(bfsLook.bind(null,soul))
+    if(node['__label'] == obj.subject || obj.subject[0] == '?'){
+      gun.get(soul).get('out').map().once(bfsLook.bind(null,obj,soul))
     }
   }
 }
-var bfsLook = function(parent,node, key) {
-  console.log('look',key, node, parent);
+var bfsLook = function(obj, parent,node, key) {
+  console.log('look',key, node, parent,obj.predicate);
   var soul = node['_']['#'] || node['#'];
-  if(node['__label']==bfsPattern[1] || bfsPattern[1][0] == '?'){
+  if(node['__label']== obj.predicate || obj.predicate[0] == '?'){
     var temp = (parent+'__'+soul);
-    gun.get(node.target['#']).once(bfsFind.bind(null,temp));
+    gun.get(node.target['#']).once(bfsFind.bind(null,obj,temp));
   }
 }
-var bfsFind = function(parent, node, key) {
+var bfsFind = function(obj, parent, node, key) {
   console.log('find',key,node, parent);
   var soul = node['_']['#'] || node['#'];
-  if(node['__label']==bfsPattern[2] || bfsPattern[2][0] == '?'){
+  if(node['__label']== obj.subject || obj.subject[0] == '?'){
     var temp = (parent+'__'+soul);
     console.log('pushed',temp);
-    bfsResult.push(temp)
+    obj.result.push(temp)
   }
 }
-var bfsPrint = function() {
-  if(!bfsResult){
+
+var bfsPrint = function(obj) {
+  if(!obj.result){
     console.log('no results');
     return;
   } else {
     var i = 0;
-    var l = bfsResult.length;
+    var l = obj.result.length;
     for(i;i<l;i++){
-      var temp = bfsResult[i];
+      var temp = obj.result[i];
       temp = temp.split('__');
       var y = 0;
       var l1 = temp.length;
@@ -132,8 +110,10 @@ var bfsPrint = function() {
 var bfsNice = function(item, node) {
   console.log(item,node['__label']);
 }
-bfsPattern = ['?p', 'type', 'Artist'];
-bfsSearch();
+
+bfsPattern = {subject:'?p',predicate:'type',object:'Artist'};
+var trav = new Traversal(bfsPattern);
+bfsSearch(trav);
 
 //Example SPARQL output
 var query = {
