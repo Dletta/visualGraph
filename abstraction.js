@@ -31,8 +31,9 @@ function newEdge(object, label) {
 }
 
 /* Create Index for Nodes and Edges */
-var nodes = gun.get('nodes').put({'__type':'index','__label':'nodesIndex'}); //creates global nodes index, but not write protected
-var edges = gun.get('edges').put({'__type':'index','__label':'edgesIndex'}); //same here
+var nodes = gun.get('nodes')/*.put({'__type':'index','__label':'nodesIndex'}); //creates global nodes index, but not write protected
+*/var edges = gun.get('edges')/*.put({'__type':'index','__label':'edgesIndex'}); //same here
+*/
 
 /* Tuple function */
 /* Takes objects or references from Gun to create nodes */
@@ -45,6 +46,76 @@ var tuple = function (node, verb, object){
 
 /* BFS Search for Pattern (Query) */
 
+var Query = ( function(){
+  var query = {};
+  var tObj = {};
+
+  query.search = function(obj){
+    tObj = obj;
+    if(tObj.subject){
+      nodes.map().once(query.step);
+    } else {
+      throw 'no pattern defined';
+    }
+  };
+
+  query.step = function(node, key){
+    if(typeof node != 'string'){
+      var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
+      console.log(soul);
+      if(node['__label'] == tObj.subject || tObj.subject[0] == '?'){
+        gun.get(soul).get('out').map().once(query.look.bind(null, soul))
+      }
+    }
+  };
+
+  query.look = function(parent, node, key) {
+    console.log('Qlook',key, node, parent);
+    var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
+    if(node['__label']== tObj.predicate || tObj.predicate[0] == '?'){
+      var temp = (parent+'__'+soul);
+      gun.get(node.target['#']).once(query.find.bind(null,temp));
+    }
+  };
+
+  query.find = function(parent, node, key) {
+    console.log('Qfind',key, node, parent);
+    var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
+    if(node['__label']== tObj.subject || tObj.subject[0] == '?'){
+      var temp = (parent+'__'+soul);
+      console.log('pushed',temp);
+      tObj.result.push(temp);
+      query.print();
+    }
+  };
+
+  query.print = function () {
+    if(!tObj.result){
+      console.log('no results');
+      return;
+    } else {
+      var i = 0;
+      var l = tObj.result.length;
+      for(i;i<l;i++){
+        var temp = tObj.result[i];
+        temp = temp.split('__');
+        var y = 0;
+        var l1 = temp.length;
+        for(y;y<l1;y++){
+          gun.get(temp[y]).once(bfsNice.bind(null,y));
+        }
+      }
+    }
+  };
+
+  query.nice = function (item, node) {
+    console.log(item,node['__label']);
+  }
+
+  return query;
+}
+)(Gun, gun, nodes, edges);
+
 var Traversal = function(triple){
   this.subject = triple.subject;
   this.predicate = triple.predicate;
@@ -52,8 +123,6 @@ var Traversal = function(triple){
   this.result = [];
 }
 
-var bfsPattern = [];
-var bfsResult = [];
 
 var bfsSearch = function(obj){
   if(obj.subject) {

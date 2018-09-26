@@ -1,6 +1,6 @@
-function print(node, key){
-  console.log('printed:',key,node);
-}
+function print (soul) {
+ gun.get(soul).once(console.log)
+};
 
 function printMap(map){
   var array = Array.from(map);
@@ -9,7 +9,7 @@ function printMap(map){
   for(;i<l;i++){
     console.log(array[i][1])
   }
-}
+};
 
 function printArr(array){
   var i =0;
@@ -17,7 +17,7 @@ function printArr(array){
   for(;i<l;i++){
     console.log(array[i])
   }
-}
+};
 
 function makeNodes(map){
   var array = Array.from(map);
@@ -28,7 +28,7 @@ function makeNodes(map){
     nodes.push(array[i][1])
   }
   return nodes;
-}
+};
 
 function makeEdges(map) {
   var array = Array.from(map);
@@ -39,7 +39,7 @@ function makeEdges(map) {
     edges.push(array[i][1])
   }
   return edges;
-}
+};
 
 function exhausted(node,edges,opt) {
   var temp;
@@ -65,7 +65,7 @@ function exhausted(node,edges,opt) {
       return temp;
     }
   }
-}
+};
 
 function explore(graph, cb, node, key) {
   var stack = [];
@@ -98,7 +98,7 @@ function explore(graph, cb, node, key) {
   graph.nodes = makeNodes(nodes);
   graph.edges = makeEdges(edges);
   cb();
-}
+};
 
 
 var dfsStack;
@@ -121,7 +121,7 @@ function dfs(soul, lbl){
   dfsNodes = new Map();
   dfsEdges = new Map();
   gun.get(soul).once(dfsNode)
-}
+};
 
 function dfsNode(node, key){
   console.log('called', dfsNodes.size);
@@ -138,7 +138,7 @@ function dfsNode(node, key){
   }
 
   dfsEdge(dfsU, dfsEdges);
-}
+};
 
 function dfsEdge(node, edges){
   if(dfsStop){console.log('stopped');return;}
@@ -163,7 +163,7 @@ function dfsEdge(node, edges){
     if(dfsStart == soul) {dfsStack.pop()}
     dfsBack();
   }
-}
+};
 
 function dfsNext (next, edgeS, edgeT, tLabel) {
   var v = next;
@@ -174,7 +174,7 @@ function dfsNext (next, edgeS, edgeT, tLabel) {
   dfsU = v;
   if(dfsNodes.size >= limit){console.log('Reached limit');render();return;}
   gun.get(soul).once(dfsNode)
-}
+};
 
 function dfsBack () {
   if(!(dfsStack.length == 0)){
@@ -183,11 +183,11 @@ function dfsBack () {
   } else {
     render();
   }
-}
+};
 
 function render () {
   console.log('done');
   graph.nodes = makeNodes(dfsNodes);
   graph.edges = makeEdges(dfsEdges);
   update();
-}
+};
