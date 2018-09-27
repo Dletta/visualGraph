@@ -102,7 +102,7 @@ var Query = ( function(){
         var y = 0;
         var l1 = temp.length;
         for(y;y<l1;y++){
-          gun.get(temp[y]).once(bfsNice.bind(null,y));
+          gun.get(temp[y]).once(query.nice.bind(null,y));
         }
       }
     }
@@ -116,6 +116,11 @@ var Query = ( function(){
 }
 )(Gun, gun, nodes, edges);
 
+/* Triple Traversal Object
+ * This stores options and is meant to become the transport object between
+ * functions that execute during Traversal
+ */
+
 var Traversal = function(triple){
   this.subject = triple.subject;
   this.predicate = triple.predicate;
@@ -123,66 +128,9 @@ var Traversal = function(triple){
   this.result = [];
 }
 
-
-var bfsSearch = function(obj){
-  if(obj.subject) {
-    nodes.map().once(bfsStep.bind(null,obj));
-  } else {
-    throw 'no pattern defined';
-  }
-}
-var bfsStep = function(obj, node, key){
-  if(typeof node != 'string'){
-    console.log(`found ${JSON.stringify(node)}`);
-    var soul = node['_']['#'] || node['#'];
-    if(node['__label'] == obj.subject || obj.subject[0] == '?'){
-      gun.get(soul).get('out').map().once(bfsLook.bind(null,obj,soul))
-    }
-  }
-}
-var bfsLook = function(obj, parent,node, key) {
-  console.log('look',key, node, parent,obj.predicate);
-  var soul = node['_']['#'] || node['#'];
-  if(node['__label']== obj.predicate || obj.predicate[0] == '?'){
-    var temp = (parent+'__'+soul);
-    gun.get(node.target['#']).once(bfsFind.bind(null,obj,temp));
-  }
-}
-var bfsFind = function(obj, parent, node, key) {
-  console.log('find',key,node, parent);
-  var soul = node['_']['#'] || node['#'];
-  if(node['__label']== obj.subject || obj.subject[0] == '?'){
-    var temp = (parent+'__'+soul);
-    console.log('pushed',temp);
-    obj.result.push(temp)
-  }
-}
-
-var bfsPrint = function(obj) {
-  if(!obj.result){
-    console.log('no results');
-    return;
-  } else {
-    var i = 0;
-    var l = obj.result.length;
-    for(i;i<l;i++){
-      var temp = obj.result[i];
-      temp = temp.split('__');
-      var y = 0;
-      var l1 = temp.length;
-      for(y;y<l1;y++){
-        gun.get(temp[y]).once(bfsNice.bind(null,y));
-      }
-    }
-  }
-}
-var bfsNice = function(item, node) {
-  console.log(item,node['__label']);
-}
-
-bfsPattern = {subject:'?p',predicate:'type',object:'Artist'};
-var trav = new Traversal(bfsPattern);
-bfsSearch(trav);
+triple = {subject:'?p',predicate:'type',object:'Artist'};
+var trav = new Traversal(triple);
+Query.search(trav);
 
 //Example SPARQL output
 var query = {

@@ -1,46 +1,6 @@
-function print (soul) {
- gun.get(soul).once(console.log)
-};
+/* Utility Functions for D3 and GunDB visualization */
 
-function printMap(map){
-  var array = Array.from(map);
-  var i =0;
-  var l = array.length;
-  for(;i<l;i++){
-    console.log(array[i][1])
-  }
-};
-
-function printArr(array){
-  var i =0;
-  var l = array.length;
-  for(;i<l;i++){
-    console.log(array[i])
-  }
-};
-
-function makeNodes(map){
-  var array = Array.from(map);
-  var nodes = [];
-  var i =0;
-  var l = array.length;
-  for(;i<l;i++){
-    nodes.push(array[i][1])
-  }
-  return nodes;
-};
-
-function makeEdges(map) {
-  var array = Array.from(map);
-  var edges = [];
-  var i =0;
-  var l = array.length;
-  for(;i<l;i++){
-    edges.push(array[i][1])
-  }
-  return edges;
-};
-
+/* Legacy Traversal  no longer used, kept for reference atm*/
 function exhausted(node,edges,opt) {
   var temp;
   var arr = Object.keys(node);
@@ -100,94 +60,143 @@ function explore(graph, cb, node, key) {
   cb();
 };
 
+/* Depth First Search - explore all of the nodes from the given Soul
+ * then update D3 data and the force-layout from the html
+ */
 
-var dfsStack;
-var dfsNodes;
-var dfsEdges;
-var dfsStart;
-var dfsU;
-var dfsLabel;
-var dfsOption = false;
-var dfsStop = false;
-var limit = 300;
+var DFS = (function(){
+  var stack;
+  var nodes;
+  var edges;
+  var start;
+  var u;
+  var label;
+  var opt = false;
+  var stop = false;
+  var limit = 300;
 
+  var util = {};
 
-function dfs(soul, lbl){
-  console.log('Starting with:',soul);
-  if(lbl){dfsOption = true;} else { dfsOption = false;}
-  dfsLabel = lbl;
-  dfsStart = soul;
-  dfsStack = [];
-  dfsNodes = new Map();
-  dfsEdges = new Map();
-  gun.get(soul).once(dfsNode)
-};
-
-function dfsNode(node, key){
-  console.log('called', dfsNodes.size);
-  if(!node){console.log('no data:',key, node); dfsBack();return;}
-  var soul = node['_']['#'] || node['#'];
-  if(soul == dfsStart){
-    dfsStack.push(soul);
-  }
-  dfsU = node;
-  if(!dfsOption){
-    dfsNodes.set(soul, {id:soul,label:key})
-  } else {
-    dfsNodes.set(soul, {id:soul,label:node[dfsLabel]})
-  }
-
-  dfsEdge(dfsU, dfsEdges);
-};
-
-function dfsEdge(node, edges){
-  if(dfsStop){console.log('stopped');return;}
-  var temp;
-  var soul = node['_']['#'] || node['#'];
-  var tLabel = 'none';
-  var arr = Object.keys(node);
-  var i = 1;
-  var l = arr.length;
-  for(;i<l;i++){
-    if(arr[i] == label) { tLabel = node[arr[i]] }
-    if(typeof(node[arr[i]]) == 'object' && node[arr[i]] != null){
-      if(!dfsEdges.has(soul+node[arr[i]]['#'])){
-        var temp = node[arr[i]];
-        break;
-      }
+  util.printMap = function (map) {
+    var array = Array.from(map);
+    var i =0;
+    var l = array.length;
+    for(;i<l;i++){
+      console.log(array[i][1])
     }
   }
-  if(temp){
-    dfsNext(temp, soul,temp['#'], tLabel);
-  } else {
-    if(dfsStart == soul) {dfsStack.pop()}
-    dfsBack();
-  }
-};
 
-function dfsNext (next, edgeS, edgeT, tLabel) {
-  var v = next;
-  var soul = v['#'];
-  dfsNodes.set(soul, {id:soul,label:v['#']})
-  dfsEdges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
-  dfsStack.push(soul)
-  dfsU = v;
-  if(dfsNodes.size >= limit){console.log('Reached limit');render();return;}
-  gun.get(soul).once(dfsNode)
-};
+  util.printArr = function (array){
+    var i =0;
+    var l = array.length;
+    for(;i<l;i++){
+      console.log(array[i])
+    }
+  };
 
-function dfsBack () {
-  if(!(dfsStack.length == 0)){
-    soul = dfsStack.pop();
-    gun.get(soul).once(dfsNode)
-  } else {
-    render();
-  }
-};
+  util.makeNodes = function (map){
+    var array = Array.from(map);
+    var nodes = [];
+    var i =0;
+    var l = array.length;
+    for(;i<l;i++){
+      nodes.push(array[i][1])
+    }
+    return nodes;
+  };
 
-function render () {
-  console.log('done');
-  graph.nodes = makeNodes(dfsNodes);
-  graph.edges = makeEdges(dfsEdges);
-  update();
-};
+  util.makeEdges = function (map) {
+    var array = Array.from(map);
+    var edges = [];
+    var i =0;
+    var l = array.length;
+    for(;i<l;i++){
+      edges.push(array[i][1])
+    }
+    return edges;
+  };
+
+  var dfs = {};
+
+  dfs.search = function(soul, lbl){
+    console.log('Starting with:',soul);
+    if(lbl){opt = true;} else { opt = false;}
+    label = lbl;
+    start = soul;
+    stack = [];
+    nodes = new Map();
+    edges = new Map();
+    gun.get(soul).once(dfs.node)
+  };
+
+  dfs.node = function(node, key) {
+    console.log('called', nodes.size);
+    if(!node){console.log('no data:',key, node); dfs.back();return;}
+    var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
+    if(soul == start){
+      stack.push(soul);
+    }
+    u = node;
+    if(!opt){
+      nodes.set(soul, {id:soul,label:key})
+    } else {
+      nodes.set(soul, {id:soul,label:node[label]})
+    }
+
+    dfs.edge(u, edges);
+  };
+
+  dfs.edge = function (node, edges) {
+    if(stop){console.log('stopped');return;}
+    var temp;
+    var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
+    var tLabel = 'none';
+    var arr = Object.keys(node);
+    var i = 1;
+    var l = arr.length;
+    for(;i<l;i++){
+      if(arr[i] == label) { tLabel = node[arr[i]] }
+      if(typeof(node[arr[i]]) == 'object' && node[arr[i]] != null){
+        if(!edges.has(soul+node[arr[i]]['#'])){
+          var temp = node[arr[i]];
+          break;
+        }
+      }
+    }
+    if(temp){
+      dfs.next(temp, soul,temp['#'], tLabel);
+    } else {
+      if(start == soul) {stack.pop()}
+      dfs.back();
+    }
+  };
+
+  dfs.next = function (next, edgeS, edgeT, tLabel) {
+    var v = next;
+    var soul = v['#'];
+    nodes.set(soul, {id:soul,label:v['#']})
+    edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
+    stack.push(soul)
+    u = v;
+    if(nodes.size >= limit){console.log('Reached limit');dfs.render();return;}
+    gun.get(soul).once(dfs.node)
+  };
+
+  dfs.back = function () {
+    if(!(stack.length == 0)){
+      soul = stack.pop();
+      gun.get(soul).once(dfs.node)
+    } else {
+      dfs.render();
+    }
+  };
+
+  dfs.render = function () {
+    console.log('Rendering');
+    graph.nodes = util.makeNodes(nodes);
+    graph.edges = util.makeEdges(edges);
+    update();
+  };
+
+  return dfs;
+})(Gun, gun, graph, update);
