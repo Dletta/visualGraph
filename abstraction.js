@@ -42,6 +42,7 @@ var tuple = function (node, verb, object){
   verb.get('source').put(node);
   verb.get('target').put(object);
   object.get('in').set(verb);
+  setTimeout(DFS.search('nodes','__label'), 1000);
 }
 
 /* BFS Search for Pattern (Query) */
@@ -105,6 +106,7 @@ var Query = ( function(){
           gun.get(temp[y]).once(query.nice.bind(null,y));
         }
       }
+      DFS.search('nodes','__label');
     }
   };
 
