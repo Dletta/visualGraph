@@ -19,18 +19,30 @@ Graph 2 - 107 Nodes
 
 Create Nodes and Edges. Store Triple
 ```
-var jack = newNode('Jack Reach');
-var wins = newEdge('wins');
-var ever = newNode('Everything');
+//syntax newNode(dataObject, label)
+var jack = newNode({name:'Jack Reach', age:29}, 'Jack');
+var wins = newEdge({when:'now'}, 'wins');
+var ever = newNode({name:'Everything'},'Everything');
 
 tuple(jack,wins,ever);
 ```
-Find it later
+Query your Data
 ```
-bfsPattern = ['?p','wins','?w'];
-bfsSearch();
-bfsPrint();
+//Look for specific tuples
+var triple = {subject:'?p',predicate:'wins',object:'Everything'};
+
+var trav = new TripTrav(triple);
+
+QuerySearch.search(trav);
+
 //prints 0 'Jack Reach'
          1 'wins'
          2 'Everything'
+         
+// Look for a specific object
+var selection = {age:29};
+var travSel = new SelectTrav(selection);
+QueryFind.find(travSel);
+
+//prints obj Jack
 ```
