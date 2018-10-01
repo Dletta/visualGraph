@@ -31,9 +31,9 @@ function newEdge(object, label) {
 }
 
 /* Create Index for Nodes and Edges */
-var nodes = gun.get('nodes')/*.put({'__type':'index','__label':'nodesIndex'}); //creates global nodes index, but not write protected
-*/var edges = gun.get('edges')/*.put({'__type':'index','__label':'edgesIndex'}); //same here
-*/
+var nodes = gun.get('nodes').put({'__type':'index','__label':'nodesIndex'}); //creates global nodes index, but not write protected
+var edges = gun.get('edges').put({'__type':'index','__label':'edgesIndex'}); //same here
+
 
 /* Tuple function */
 /* Takes objects or references from Gun to create nodes */
@@ -45,9 +45,26 @@ var tuple = function (node, verb, object){
   setTimeout(DFS.search('nodes','__label'), 1000);
 }
 
+var addNode = function (label, edgeR, nodeR) {
+  var obj = {label:label, edge:edgeR, node:nodeR};
+  nodes.map().once(function(obj, data, key){
+    if(data.__label == obj.label) {
+      var soul = Gun.node.soul(data);
+      var node = gun.get(soul).get('out').set(obj.edge);
+      console.log(node._.soul);
+      var node = gun.get(node._.soul);
+      obj.edge.get('source').put(node);
+      obj.edge.get('target').put(obj.node);
+      obj.node.get('in').set(obj.edge);
+    } else {
+      console.log(`${obj.label}, not found`);
+    }
+  }.bind(null, obj));
+};
+
 /* BFS Search for Pattern (Query) */
 
-var Query = ( function(){
+var QuerySearch = ( function(){
   var query = {};
   var tObj = {};
 
@@ -118,50 +135,89 @@ var Query = ( function(){
 }
 )(Gun, gun, nodes, edges);
 
+var QueryFind = ( function(){
+  var query = {};
+  var tObj = {};
+  var util = {};
+
+  util.isMatch = function (is, toMatch) {
+    return toMatch.some(function (v) {
+        return is.indexOf(v) >= 0;
+    });
+  };
+
+  util.print = function () {
+    console.log('Found:');
+    var arr = Object.entries(tObj.result[0]);
+    var i = 0;
+    var l = arr.length;
+    for(i;i<l;i++){
+      console.log(arr[i][0]);
+      console.log(arr[i][1]);
+    }
+    DFS.search('nodes','__label');
+  }
+
+  query.find = function(obj){
+    tObj = obj;
+    nodes.map().once(query.match);
+  };
+
+  query.match = function(node, key){
+    if(typeof node != 'string'){
+      var keysQ = Object.keys(tObj.obj);
+      var keys = Object.keys(node);
+      var soul = node._.soul;
+      if(util.isMatch(keys,keysQ)){
+        for(var i=0;i<keys.length;i++){
+          for(var y=0;y<keysQ.length;y++){
+            var qK = keysQ[y];
+            var qV = tObj.obj[qK];
+            var k = keys[i];
+            var v = node[k];
+            if(qV == v && k == qK) {
+              tObj.result.push(node);
+              util.print();
+            }
+          }
+        }
+      } else {
+        console.log('no match!');
+        return;
+      }
+    } else {
+      return;
+    }
+  };
+
+  return query;
+}
+)(Gun, gun, nodes, edges);
+
+
 /* Triple Traversal Object
  * This stores options and is meant to become the transport object between
  * functions that execute during Traversal
  */
 
-var Traversal = function(triple){
+var TripTrav = function(triple){
   this.subject = triple.subject;
   this.predicate = triple.predicate;
   this.object = triple.object;
   this.result = [];
 }
 
-triple = {subject:'?p',predicate:'type',object:'Artist'};
-var trav = new Traversal(triple);
-Query.search(trav);
+var triple = {subject:'?p',predicate:'type',object:'Artist'};
+var trav = new TripTrav(triple);
+QuerySearch.search(trav);
 
-//Example SPARQL output
-var query = {
-  "type": "query",
-  "prefixes": {
-    "dbpedia-owl": "http://dbpedia.org/ontology/"
-  },
-  "queryType": "SELECT",
-  "variables": [ "?p", "?c" ],
-  "where": [
-    {
-      "type": "bgp",
-      "triples": [
-        {
-          "subject": "?p",
-          "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-          "object": "http://dbpedia.org/ontology/Artist"
-        },
-        {
-          "subject": "?p",
-          "predicate": "http://dbpedia.org/ontology/birthPlace",
-          "object": "?c"
-        },
-        {
-          "subject": "?c",
-          "predicate": "http://xmlns.com/foaf/0.1/name",
-          "object": "\"York\"@en"
-        }
-      ]
-    }
-  ]
+/* Select an object to match from a node */
+
+var SelectTrav = function(obj) {
+  this.obj = obj;
+  this.result = [];
 }
+
+var selection = {name:'Ice Cream'};
+var travSel = new SelectTrav(selection);
+QueryFind.find(travSel);

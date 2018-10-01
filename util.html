@@ -106,6 +106,21 @@
         })
   }
 
+  function makeLabel(data) {
+    console.log(data);
+    var i = 0;
+    var l = Object.entries(data).length;
+    var string = '';
+    for(i;i<l;i++){
+      var temp = Object.entries(data)[i][0];
+      temp += ' : ';
+      var temp1 = Object.entries(data)[i][1];
+      temp1 += ' ';
+      string += temp + temp1 + " // ";
+    }
+    return string;
+  }
+
   var svg = d3.select("svg"),
   width = +svg.attr("width"),
   height = +svg.attr("height");
