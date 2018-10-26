@@ -5,7 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "gun": "^0.9.99995",
-    "sparqljs": "^2.1.0"
+    "sparqljs": "^2.1.0",
+    "node-webcrypto-ossl": "^1.0"
   },
   "devDependencies": {},
   "scripts": {
