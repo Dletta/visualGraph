@@ -5,7 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "@trust/webcrypto": "^0.9.2",
-    "gun": "^0.9.99995",
+    "gun": "^0.9.99997",
     "node-webcrypto-ossl": "^1.0",
     "sparqljs": "^2.1.0",
     "text-encoding": "^0.7.0"
