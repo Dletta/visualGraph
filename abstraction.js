@@ -230,29 +230,26 @@ QueryFind.find(travSel);
  var localGraph = function() {
    this.map = new Map(),
    this.add = function (item) {
-     var uuid = uuidv4()
-     this.map.set(uuid, item)
-     return uuid
+     var uuid = uuidv4();
+     this.map.set(uuid, item);
+     return uuid;
    },
    this.find = function(uuid) {
-     return this.map.get(uuid)
+     return this.map.get(uuid);
+   },
+   this.update = function(uuid, item) {
+     this.map.set(uuid, item);
    }
  }
 
  function uuidv4 () {
    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxx'.replace(/[xy]/g, function(c) {
-     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)
-     return v.toString(16)
+     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+     return v.toString(16);
    })
  }
 
  var lGraph = new localGraph();
- var test = lGraph.add('test');
- var obj = {name:'test', label:'person', birthdate:'07-05-1986'}
- var testO = lGraph.add(obj)
- console.log(lGraph)
- console.log('test')
- console.log(test)
- console.log(lGraph.find(test))
- console.log('testO')
- console.log(testO)
+ var test = lGraph.add({id:'test1'});
+ var obj = {name:'test', label:'person', birthdate:'07-05-1986', link: test};
+ var test0 = lGraph.add(obj)
