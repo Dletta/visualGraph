@@ -8,12 +8,31 @@
   <body>
     <div class="menu" id="menu">
       <span class="button">Menu</span>
-      <span class="button">Browse <input type="text" name="browse" value="AXE:dAppname"></span>
+      <span class="button" onclick="gun.get('functions').get('add').once(pull)">Browse <input type="text" name="browse" value="AXE:dAppname"></span>
       <span class="button">Edit</span>
       <span class="button">Insert</span>
       <span class="button">Validate</span>
-      <span class="button">Publish</span>
+      <span class="button" onclick="push()">Publish</span>
     </div>
-    <textarea name="editor" rows="100" cols="100"> Edit here</textarea>
+    <textarea id="editor" rows="100" cols="100"> Edit here</textarea>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <script type="text/javascript">
+    var peers = ['http://localhost:8000/gun'/*,'https://notabug.io/gun'*/]
+    var gun = Gun({peers:peers, localStorage: false, radisk:false});
+
+    console.log("Paste 'var add = function(a,b){return a+b;}'");
+    var push = function() {
+      var input = document.getElementById('editor');
+      gun.get('functions').put({add:input.value});
+      console.log(input.value + ' saved');
+    }
+
+    var pull = function(data, key) {
+      var scr = document.createElement('script');
+      scr.innerHTML = data;
+      document.all[0].appendChild(scr);
+      console.log('pulled function');
+    }
+  </script>
 </html>
