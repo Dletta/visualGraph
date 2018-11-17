@@ -1,9 +1,5 @@
 /* Abstraction Layer to GunDB
-* Functions to abstract the creation of a schema,
-* compatible with OWL/RDF via SPARQL,
-* the goal here is to make it as easy for the user and/or
-* interface into gun, to create and retrieve linked data
-* graphs
+* Functions to abstract the creation of a schema
 */
 
 /* Schema definitions:
