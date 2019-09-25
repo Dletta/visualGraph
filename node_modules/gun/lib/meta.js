@@ -1,4 +1,4 @@
-$(function(){
+;(function(){
 	var noop = function(){}, u;
 	var m = window.meta = {edit:[]};
 	var k = m.key = {};
@@ -231,8 +231,9 @@ $(function(){
 				});
 				tmp += '}\n';
 			});
-			(node = document.createElement('style')).innerHTML = tmp;
-			document.body.appendChild(node);
+			var tag = document.createElement('style');
+			tag.innerHTML = tmp;
+			document.body.appendChild(tag);
 		}
 	}catch(e){}}());
 	;(function(){
@@ -379,4 +380,4 @@ $(function(){
 			up: function(){}
 		});
 	}());
-});
+}());

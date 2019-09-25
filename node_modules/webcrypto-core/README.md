@@ -1,8 +1,9 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/PeculiarVentures/webcrypto-core/master/LICENSE)
 [![Build Status](https://travis-ci.org/PeculiarVentures/webcrypto-core.svg?branch=master)](https://travis-ci.org/PeculiarVentures/webcrypto-core)
 [![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/webcrypto-core/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/webcrypto-core?branch=master)
+[![npm version](https://badge.fury.io/js/webcrypto-core.svg)](https://badge.fury.io/js/webcrypto-core)
 
-[![NPM](https://nodei.co/npm-dl/webcrypto-core.png?months=2&height=2)](https://nodei.co/npm/webcrypto-core/)
+[![NPM](https://nodei.co/npm/webcrypto-core.png)](https://nodei.co/npm/webcrypto-core/)
 
 # webcrypto-core
 
@@ -10,56 +11,65 @@ We have created a number of WebCrypto polyfills including: [node-webcrypto-ossl]
 
 Unless you intend to create a WebCrypto polyfill this library is probably not useful to you.
 
-## Dependencies
+## Installing
 
-Install all dependencies
 ```
-npm install
-```
-
-> NOTE: `npm install` command downloads and installs modules to local folder. 
-> You can install all dependencies globally 
-
-typescript
-```
-npm install typescript --global
+npm install webcrypto-core
 ```
 
-rollup
-```
-npm install rollup --global
-```
+## Example
 
-mocha
-```
-npm install mocha --global
-```
+Current examples shows how you can implement your own WebCrypt interface
 
-Single line command for all modules
-```
-npm install typescript rollup mocha --global
-```
+```js
+const core = require(".");
+const crypto = require("crypto");
 
-## Compilation 
-Compile the source code using the following command:
-```
-npm run build
-```
-> NOTE: Command creates `webcrypto-core.js` and `webcrypto-core.min.js` files in `build` folder
+class Sha1Provider extends core.ProviderCrypto {
 
-Compile the source code with declaration using the next command:
-```
-tsc --declaration
-```
+  constructor() {
+    super();
 
-## Test
-```
-npm test
-```
+    this.name = "SHA-1";
+    this.usages = [];
+  }
 
-## Size
+  async onDigest(algorithm, data) {
+    const hash = crypto.createHash("SHA1").update(Buffer.from(data)).digest();
+    return new Uint8Array(hash).buffer;
+  }
 
-| Files                   | Size       |
-|-------------------------|------------|
-| webcrypto-core.js       | 59Kb       |
-| webcrypto-core.min.js   | 25Kb       |
+}
+
+class SubtleCrypto extends core.SubtleCrypto {
+  constructor() {
+    super();
+
+    // Add SHA1 provider to SubtleCrypto
+    this.providers.set(new Sha1Provider());
+  }
+}
+
+class Crypto {
+
+  constructor() {
+    this.subtle = new SubtleCrypto();
+  }
+
+  getRandomValues(array) {
+    const buffer = Buffer.from(array.buffer);
+    crypto.randomFillSync(buffer);
+    return array;
+  }
+
+}
+
+const webcrypto = new Crypto();
+webcrypto.subtle.digest("SHA-1", Buffer.from("TEST MESSAGE"))
+  .then((hash) => {
+    console.log(Buffer.from(hash).toString("hex")); // dbca505deb07e1612d944a69c0c851f79f3a4a60
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+```

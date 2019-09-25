@@ -136,10 +136,15 @@
   label.attr("transform", d3.event.transform);
   }
 
+  function detail(ev) {
+    console.log(ev);
+    gun.get(ev.id).once(console.log);
+  }
+
   var color = d3.scaleOrdinal(d3.schemeCategory10);
 
   var simulation = d3.forceSimulation();
-  simulation.force("charge", d3.forceManyBody().strength(-300));
+  simulation.force("charge", d3.forceManyBody().strength(-600));
   simulation.force("link", d3.forceLink().id(function(d) { return d.id; }));
   simulation.force("center", d3.forceCenter(width/2,height/2));
 
@@ -148,7 +153,8 @@ function update () {
   svg.selectAll('*').remove();
   link = svg.append("g").attr("class","links").selectAll("line").data(graph.edges).enter().append("line");
   node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.nodes).enter()
-                .append("circle").attr("r", 2.5).attr('fill', 'red').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended));
+                .append("circle").attr("r", 2.5).attr('fill', 'red').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended))
+                .on("click", detail);
   node.append("title").text((d)=>{return d.id;});
   label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{return d.label}).attr('x', (d)=>{return d.x});
   simulation.nodes(graph.nodes).on("tick", ticked);
