@@ -1,29 +1,7 @@
-+0#"edgesjwr8wj5bQoMZZ2Kd0kCi:"#jwr8wj5bQoMZZ2Kd0kCi>+1560223694064
-+0#"jwr8wj
-+1#"4wDazo0KAJJ1e7
-+2#"__
-+3#"label:""Jack>+1560223694049
-+3#"type:""node>+1560223694049
-+2#"age:"+29>+1560223694049
-+2#"name:""Jack Reach>+1560223694049
-+2#"out:"#jwr8wj83HLzideDdatzr>+1560223694068
-+1#"5
-+2#"bQoMZZ2Kd0kCi
-+3#"__
-+4#"label:""wins>+1560223694063.001
-+4#"type:""edge>+1560223694063.001
-+3#"source:"#jwr8wj4wDazo0KAJJ1e7>+1560223694069
-+3#"target:"#jwr8wj5d2w0ljZbsUZoI>+1560223694069.002
-+3#"when:""now>+1560223694063.001
-+2#"d2w0ljZbsUZoI
-+3#"__
-+4#"label:""Everything>+1560223694065.001
-+4#"type:""node>+1560223694065.001
-+3#"in:"#jwr8wj8801aZ1ELGFNZ4A0u>+1560223694070
-+3#"name:""Everything>+1560223694065.001
-+1#"8
-+2#"3HLzideDdatzrjwr8wj5bQoMZZ2Kd0kCi:"#jwr8wj5bQoMZZ2Kd0kCi>+1560223694068
-+2#"801aZ1ELGFNZ4A0ujwr8wj5bQoMZZ2Kd0kCi:"#jwr8wj5bQoMZZ2Kd0kCi>+1560223694070
-+0#"nodesjwr8wj
-+1#"4wDazo0KAJJ1e7:"#jwr8wj4wDazo0KAJJ1e7>+1560223694056
-+1#"5d2w0ljZbsUZoI:"#jwr8wj5d2w0ljZbsUZoI>+1560223694066
++0#"k0ysfnjoFdaOBHrbRwZQ
++1#"label:""child1>+1569387022575
++1#"name:""child1>+1569386891499
++0#"test
++1#"childObj:"#k0ysfnjoFdaOBHrbRwZQ>+1569387022575
++1#"label:""test>+1569386238468
++1#"name:""test>+1569384006561
