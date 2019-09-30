@@ -3,7 +3,7 @@
 ### How to use
 
 Require into the website you want to use as a data inspector like so,
-```https://cdn.jsdelivr.net/gh/dletta/visualGraph/visualGraph.js```
+```<script src="https://cdn.jsdelivr.net/gh/dletta/visualGraph/visualGraph.js" charset="utf-8"></script>```
 
 ### Powered by
 
