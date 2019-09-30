@@ -1,4 +1,19 @@
-# visualGraph
+## visualGraph - A visualizer / explorer for Gun DB data
+
+### How to use
+
+Require into the website you want to use as a data inspector like so,
+```https://cdn.jsdelivr.net/gh/dletta/visualGraph/visualGraph.js```
+
+### Powered by
+
+Gun DB and d3.js
+
+
+##Legacy info below
+
+
+### visualGraph
 Gun Utility to Traverse Graph and use d3.js to visualize
 
 Run your node.js super-peer, open the util.html (modify the peer to include only your peer's address)
@@ -16,7 +31,7 @@ Graph 1 - 4 Nodes
 ![Image of many nodes](https://i.imgur.com/Vap9pQn.png)
 Graph 2 - 107 Nodes
 
-# Triple store
+### Triple store
 
 Create Nodes and Edges. Store Triple
 ```
