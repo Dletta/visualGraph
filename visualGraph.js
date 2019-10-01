@@ -1,65 +1,119 @@
-/* Visual Graph Library / Visualizer
-* The library will require d3 to be added into your website.
-* License: MIT
-* Author: Jachen Duschletta 2019
-* Version: 0.1.0
-* Please leave any issues in the Github Issues for github.com/dletta/visualGraph, thank you!
-*/
-
-var icon = 'data:image/jpeg;base64, ' + "PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KIDwhLS0gQ3JlYXRlZCB3aXRoIE1ldGhvZCBEcmF3IC0gaHR0cDovL2dpdGh1Yi5jb20vZHVvcGl4ZWwvTWV0aG9kLURyYXcvIC0tPgogPGc+CiAgPHRpdGxlPmJhY2tncm91bmQ8L3RpdGxlPgogIDxyZWN0IGZpbGw9IiNjY2NjY2MiIGlkPSJjYW52YXNfYmFja2dyb3VuZCIgaGVpZ2h0PSI0MDIiIHdpZHRoPSI0MDIiIHk9Ii0xIiB4PSItMSIvPgogIDxnIGRpc3BsYXk9Im5vbmUiIG92ZXJmbG93PSJ2aXNpYmxlIiB5PSIwIiB4PSIwIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIiBpZD0iY2FudmFzR3JpZCI+CiAgIDxyZWN0IGZpbGw9InVybCgjZ3JpZHBhdHRlcm4pIiBzdHJva2Utd2lkdGg9IjAiIHk9IjAiIHg9IjAiIGhlaWdodD0iMTAwJSIgd2lkdGg9IjEwMCUiLz4KICA8L2c+CiA8L2c+CiA8Zz4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPGxpbmUgc3Ryb2tlLWxpbmVjYXA9InVuZGVmaW5lZCIgc3Ryb2tlLWxpbmVqb2luPSJ1bmRlZmluZWQiIGlkPSJzdmdfNyIgeTI9IjI2Mi40NDk5OTciIHgyPSIzMDEuNSIgeTE9IjMwOS40NDk5OTciIHgxPSIxMDEuNSIgc3Ryb2tlLXdpZHRoPSIxMi41IiBzdHJva2U9IiM2MGJjNjAiIGZpbGw9Im5vbmUiLz4KICA8bGluZSBzdHJva2UtbGluZWNhcD0idW5kZWZpbmVkIiBzdHJva2UtbGluZWpvaW49InVuZGVmaW5lZCIgaWQ9InN2Z184IiB5Mj0iMjY4LjQ0OTk5NyIgeDI9IjMxMy41IiB5MT0iMTYzLjQ0OTk5NyIgeDE9IjE2NS41IiBzdHJva2Utd2lkdGg9IjEyLjUiIHN0cm9rZT0iIzYwYmM2MCIgZmlsbD0ibm9uZSIvPgogIDxsaW5lIHN0cm9rZS1saW5lY2FwPSJ1bmRlZmluZWQiIHN0cm9rZS1saW5lam9pbj0idW5kZWZpbmVkIiBpZD0ic3ZnXzYiIHkyPSIzMDAuNDQ5OTk3IiB4Mj0iOTkuNSIgeTE9IjE3MS40NDk5OTciIHgxPSIxNTUuNSIgc3Ryb2tlLXdpZHRoPSIxMi41IiBzdHJva2U9IiM2MGJjNjAiIGZpbGw9Im5vbmUiLz4KICA8bGluZSBzdHJva2UtbGluZWNhcD0idW5kZWZpbmVkIiBzdHJva2UtbGluZWpvaW49InVuZGVmaW5lZCIgaWQ9InN2Z181IiB5Mj0iMTU3LjQ0OTk5NyIgeDI9IjE3NS41IiB5MT0iODMuNDQ5OTk3IiB4MT0iMzMzLjUiIHN0cm9rZS13aWR0aD0iMTIuNSIgc3Ryb2tlPSIjNjBiYzYwIiBmaWxsPSJub25lIi8+CiAgPGVsbGlwc2Ugcnk9IjMxLjk5OTk5OSIgcng9IjMzLjUwMDAwMSIgaWQ9InN2Z18xIiBjeT0iODQuNDQ5OTk2IiBjeD0iMzMzLjk5OTk5NyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZT0iIzAwMCIgZmlsbD0iIzYwYmM2MCIvPgogIDxlbGxpcHNlIHJ5PSIzMiIgcng9IjMyIiBpZD0ic3ZnXzIiIGN5PSIxNjQuNDQ5OTk3IiBjeD0iMTYyLjUiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2U9IiMwMDAiIGZpbGw9IiM2MGJjNjAiLz4KICA8ZWxsaXBzZSByeT0iMzMiIHJ4PSIzMyIgaWQ9InN2Z18zIiBjeT0iMjY2LjQ0OTk5NyIgY3g9IjMwOS41IiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlPSIjMDAwIiBmaWxsPSIjNjBiYzYwIi8+CiAgPGVsbGlwc2Ugcnk9IjMzIiByeD0iMzMiIGlkPSJzdmdfNCIgY3k9IjMwNS40NDk5OTciIGN4PSI5OC41IiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlPSIjMDAwIiBmaWxsPSIjNjBiYzYwIi8+CiA8L2c+Cjwvc3ZnPg=="
-
-var ic = document.createElement('img');
-ic.setAttribute('src', icon);
-ic.setAttribute('class', 'vGbutton');
-ic.addEventListener('click', switchMenu);
-document.body.appendChild(ic);
-
-var container = document.createElement('div');
-container.setAttribute('class', 'vGcont');
-var test = document.createTextNode('Testing');
-container.appendChild(test)
-document.body.appendChild(container);
-
-
-var style = document.createElement('style');
-style.type = 'text/css';
-var str = '.vGcont {';
-str += 'color: rgb(255,255,255);';
-str += 'background-color: rgba(20,20,20,0.2);';
-str += 'position: fixed;';
-str += 'z-index: 1;';
-str += 'width: 0;';
-str += 'height: 100%;';
-str += 'overflow-x: hidden;';
-str += 'top: 0;';
-str += 'left: 0;';
-str += 'padding: 20px;';
-str += 'transition: 0.5s;';
-str += '}';
-str += '.vGbutton {';
-str += 'color: rgb(255,255,255);';
-str += 'background-color: rgba(20,20,20,0.2);';
-str += 'position: fixed;';
-str += 'z-index: 1;';
-str += 'width: 100px;';
-str += 'height: 100px;';
-str += 'overflow-x: hidden;';
-str += 'top: 0;';
-str += 'left: 0;';
-str += 'padding: 20px;';
-str += 'transition: 0.5s;';
-str += '}';
-style.innerHTML = str;
-document.getElementsByTagName('head')[0].appendChild(style);
-
-function switchMenu() {
-  var w = document.getElementsByClassName("vGCont").width;
-  if(w == '100%') {
-    w = 0;
-  } else {
-    w = '100%';
-  }
-  console.log('switching menu');
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
 }
 
-console.log('Graph Visualizer is activated.')
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+function ticked() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      })
+}
+
+function makeLabel(data) {
+  console.log(data);
+  var i = 0;
+  var l = Object.entries(data).length;
+  var string = '';
+  for(i;i<l;i++){
+    var temp = Object.entries(data)[i][0];
+    temp += ' : ';
+    var temp1 = Object.entries(data)[i][1];
+    temp1 += ' ';
+    string += temp + temp1 + " // ";
+  }
+  return string;
+}
+
+var svg = d3.select("svg"),
+width = +svg.attr("width"),
+height = +svg.attr("height");
+var link;
+var node;
+var label;
+var zoom = d3.zoom();
+svg.call(zoom.on("zoom", zoomed));
+
+function zoomed() {
+link.attr("transform", d3.event.transform);
+node.attr("transform", d3.event.transform);
+label.attr("transform", d3.event.transform);
+}
+
+function detail(ev) {
+  console.log(ev);
+  gun.get(ev.id).once((data, key) => {
+    var det = document.getElementById('detail');
+    var soul = Gun.node.soul(data);
+    var prop = Object.keys(data);
+    var string = "<div class='contV'><h3> Data Inspector </h3>";
+    string += "<div class='item'>KEY: " + key + " SOUL: " + soul;
+    string += "<div class='contV'> "
+    for(var item of prop) {
+      console.log(item);
+      if(item != "_") {
+        //ignore meta data
+        string += "<div class='prop'> PROP: " + item;
+        if(typeof data[item] == 'string'){
+          string += " VALUE: " + data[item];
+        } else {
+          string += " VALUE: " + data[item]['#'];
+        }
+        string += "</div>";
+      }
+    }
+    string += "</div></div></div>";
+    det.innerHTML =  string;
+  });
+}
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var simulation = d3.forceSimulation();
+simulation.force("charge", d3.forceManyBody().strength(-600));
+simulation.force("link", d3.forceLink().id(function(d) { return d.id; }));
+simulation.force("center", d3.forceCenter(width/2,height/2));
+
+function update () {
+console.log('updated');
+svg.selectAll('*').remove();
+link = svg.append("g").attr("class","links").selectAll("line").data(graph.edges).enter().append("line");
+node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.nodes).enter()
+              .append("circle").attr("r", 2.5).attr('fill', 'red').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended))
+              .on("click", detail);
+node.append("title").text((d)=>{return d.id.toUpperCase();});
+label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{return d.label.toUpperCase()}).attr('x', (d)=>{return d.x});
+simulation.nodes(graph.nodes).on("tick", ticked);
+simulation.force("link").links(graph.edges);
+simulation.restart();
+function ticked() {
+link
+    .attr("x1", function(d) { return d.source.x; })
+    .attr("y1", function(d) { return d.source.y; })
+    .attr("x2", function(d) { return d.target.x; })
+    .attr("y2", function(d) { return d.target.y; });
+
+node
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; });
+label
+    .attr("x", function(d) { return d.x + 5; })
+    .attr("y", function(d) { return d.y + 3; })
+}
+};

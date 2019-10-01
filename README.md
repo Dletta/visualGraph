@@ -2,22 +2,20 @@
 
 ### How to use
 
-Require into the website you want to use as a data inspector like so,
-```<script src="https://cdn.jsdelivr.net/gh/dletta/visualGraph/visualGraph.js" charset="utf-8"></script>```
+Clone the repo, open visualGraph.html in your browser.
+
+Specify the super / node / heroku peer whose data you want to inspect.
 
 ### Powered by
 
 Gun DB and d3.js
 
 
-##Legacy info below
+### Description
 
+Utility to Traverse Graph and use d3.js to visualize
 
-### visualGraph
-Gun Utility to Traverse Graph and use d3.js to visualize
-
-Run your node.js super-peer, open the util.html (modify the peer to include only your peer's address)
-then open the console in the website and type DFS.search(yourRootNodeKey,labelInData)
+1. type DFS.search(yourRootNodeKey,labelInData)
 that will start traversing the graph.
 After it is complete the graph will show.
 Start exploring the node and graph from any given root.
@@ -54,7 +52,7 @@ QuerySearch.search(trav);
 //prints 0 'Jack Reach'
          1 'wins'
          2 'Everything'
-         
+
 // Look for a specific object
 var selection = {age:29};
 var travSel = new SelectTrav(selection);

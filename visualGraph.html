@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>Graph Visualizer</title>
+    <link rel="stylesheet" href="vGmain.css">
+  </head>
+  <body>
+    <img src="visualGraphIcon.svg" width="30" height="30" alt="">
+    <h2>Visualization</h2> <br>
+    <svg width="700" height="500"></svg>
+    <div class="cont" id="detail">
+       <h3> Data Inspector </h3>
+    </div>
+
+  </body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="node_modules/gun/gun.js"></script>
+  <script src="node_modules/gun/lib/promise.js" charset="utf-8"></script>
+  <script src="node_modules/gun/lib/rindexed.js" charset="utf-8"></script>
+  <script src="node_modules/gun/sea.js"></script>
+
+
+  <script type="text/javascript">
+  localStorage.clear();
+
+  var peers = ['http://localhost:8000/gun'/*'https://notabug.io/gun'*/];
+  var gun = Gun({peers:peers, localStorage:false, indexedDB:true});
+
+  var graph = {};
+  </script>
+
+  <script src="visualGraph.js"></script>
+  <script src="gunutil.js"></script>
+  <script src="abstraction.js"></script>
+  <script type="text/javascript">
+    DFS.search('test', 'label');
+  </script>
+
+</html>

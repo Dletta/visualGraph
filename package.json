@@ -1,12 +1,10 @@
 {
   "name": "visualgraph",
   "version": "0.2.0",
-  "description": "Graph Visualizer for Gun dDatabase, Abstraction and Schema",
+  "description": "Graph Visualizer for Gun Database, Abstraction and Schema",
   "main": "main.js",
   "dependencies": {
-    "@trust/webcrypto": "^0.9.2",
-    "gun": "^0.2019.915",
-    "text-encoding": "^0.7.0"
+    "gun": "^0.2019.930"
   },
   "devDependencies": {},
   "scripts": {
