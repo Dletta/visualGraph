@@ -6,6 +6,14 @@ Clone the repo, open visualGraph.html in your browser.
 
 Specify the super / node / heroku peer whose data you want to inspect.
 
+Enter the key/soul of the node you want to focus on.
+If your schema has a label node, specify it, empty will label each node with it’s soul.
+
+Hit start. Graph is traversed based on connections in your data.
+
+Navigate graph by click, drag and zoom.
+Click on nodes to display their data.
+
 ### Powered by
 
 Gun DB and d3.js
