@@ -105,7 +105,6 @@ simulation.restart();
 /* SECTION: Graph Inspector */
 
 function detail(ev) {
-  console.log(ev);
   gun.get(ev.id).once((data, key) => {
     var det = document.getElementById('detail');
     var soul = Gun.node.soul(data);
@@ -118,10 +117,11 @@ function detail(ev) {
       if(item != "_") {
         //ignore meta data
         string += "<div class='prop'> PROP: " + item;
-        if(typeof data[item] == 'string'){
-          string += " VALUE: " + data[item];
-        } else {
+        console.log(item, data[item])
+        if(typeof data[item] == 'object'){
           string += " VALUE: " + data[item]['#'];
+        } else {
+          string += " VALUE: " + data[item];
         }
         string += "</div>";
       }
@@ -133,8 +133,12 @@ function detail(ev) {
 
 /* SECTION: DFS functionality */
 
-var DFS = (function () {
 
+/* Depth First Search - explore all of the nodes from the given Soul
+ * then update D3 data and the force-layout from the html
+ */
+
+var DFS = (function(){
   var stack;
   var nodes;
   var edges;
@@ -146,6 +150,23 @@ var DFS = (function () {
   var limit = 300;
 
   var util = {};
+
+  util.printMap = function (map) {
+    var array = Array.from(map);
+    var i =0;
+    var l = array.length;
+    for(;i<l;i++){
+      console.log(array[i][1])
+    }
+  }
+
+  util.printArr = function (array){
+    var i =0;
+    var l = array.length;
+    for(;i<l;i++){
+      console.log(array[i])
+    }
+  };
 
   util.makeNodes = function (map){
     var array = Array.from(map);
@@ -171,7 +192,7 @@ var DFS = (function () {
 
   var dfs = {};
 
-  dfs.explore = async function(soul, lbl){
+  dfs.search = function(soul, lbl){
     console.log('Starting with:',soul);
     if(lbl){opt = true;} else { opt = false;}
     label = lbl;
@@ -179,12 +200,12 @@ var DFS = (function () {
     stack = [];
     nodes = new Map();
     edges = new Map();
-    var node = await gun.get(soul).promOnce();
-    dfs.node(node);
+    gun.get(soul).once(dfs.node)
   };
 
-  dfs.node = function (node) {
-    if(!node.data){console.log('no data:',node.key, node.data); dfs.back();return;}
+  dfs.node = function(node, key) {
+    console.log('called', nodes.size);
+    if(!node){console.log('no data:',key, node); dfs.back();return;}
     var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
     if(soul == start){
       stack.push(soul);
@@ -193,7 +214,7 @@ var DFS = (function () {
     if(!opt){
       nodes.set(soul, {id:soul,label:key})
     } else {
-      nodes.set(soul, {id:soul,label:node.data.label})
+      nodes.set(soul, {id:soul,label:node[label]})
     }
 
     dfs.edge(u, edges);
@@ -203,39 +224,36 @@ var DFS = (function () {
     if(stop){console.log('stopped');return;}
     var temp;
     var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
-    var tLabel = soul;
+    var tLabel = 'none';
     var arr = Object.keys(node);
-    for(var prop in arr){
-      if(prop !== "_"){ //ignore metadata
-        if(prop == label) { tLabel = node[prop] }
-        if(typeof(node[prop]) == 'object' && node[prop] != null){
-          if(!edges.has(soul+node[prop]['#'])){
-            var temp = node[prop];
-            break;
-          }
+    var i = 1;
+    var l = arr.length;
+    for(;i<l;i++){
+      if(arr[i] == label) { tLabel = node[arr[i]] }
+      if(typeof(node[arr[i]]) == 'object' && node[arr[i]] != null){
+        if(!edges.has(soul+node[arr[i]]['#'])){
+          var temp = node[arr[i]];
+          break;
         }
       }
     }
     if(temp){
-      dfs.next(temp, soul, temp['#'], tLabel);
+      dfs.next(temp, soul,temp['#'], tLabel);
     } else {
       if(start == soul) {stack.pop()}
       dfs.back();
     }
   };
 
-  dfs.next = async function (next, edgeS, edgeT, tLabel) {
-    console.log('next', next);
+  dfs.next = function (next, edgeS, edgeT, tLabel) {
     var v = next;
     var soul = v['#'];
-    nodes.set(soul, {id:soul,label:tLabel})
+    nodes.set(soul, {id:soul,label:v['#']})
     edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
     stack.push(soul)
-    dfs.render();
     u = v;
     if(nodes.size >= limit){console.log('Reached limit');dfs.render();return;}
-    var node = await gun.get(soul).promOnce();
-    dfs.node(node);
+    gun.get(soul).once(dfs.node)
   };
 
   dfs.back = function () {
@@ -255,5 +273,4 @@ var DFS = (function () {
   };
 
   return dfs;
-
-})()
+})(Gun, gun, graph, update);

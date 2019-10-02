@@ -6,14 +6,39 @@ h2 {
   display: inline;
 }
 
+h3 {
+  margin: 5px;
+}
+
 body {
-  background-color: rgb(20,30,20);
+  background-color: rgb(40,60,40);
   color: #fdeced;
 }
 
 svg {
+  width: 100%;
   background-color: #6b591d;
   color: #fdeced;
+  border: solid 2px #fdeced;
+  border-radius: 3px;
+  box-shadow: 1px 1px 5px black;
+}
+
+input {
+  margin: 5px;
+}
+
+button {
+  background-color: #6b591d;
+  color: #fdeced;
+  margin: 10px;
+  margin-left: 0px;
+  padding: 2px;
+  width: 100px;
+  height: 40px;
+  border: solid 2px #fdeced;
+  border-radius: 3px;
+  box-shadow: 1px 1px 5px black;
 }
 
 .links line {
@@ -33,23 +58,49 @@ text {
 }
 
 .cont {
+  width: 100%;
+  height: 500px;
+  display: inline-flex;
+  align-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  background-color: #6b591d;
+  color: #fdeced;
+  border: solid 2px #fdeced;
+  border-radius: 3px;
+  box-shadow: 1px 1px 5px black;
+}
+
+.contV {
+  align-content: space-around;
+  display: flex;
+  flex-direction: column;
+  background-color: #6b591d;
+  color: #fdeced;
+}
+
+.container {
   display: inline-flex;
   align-content: flex-start;
   display: flex;
   flex-direction: row;
 }
 
-.contV {
-  align-content: flex-start;
-  display: flex;
-  flex-direction: column;
-}
-
 .item {
   background-color: #6b591d;
   padding: 5px;
+  margin: 10px;
   border-radius: 5px;
   box-shadow: 1px 1px 2px black;
-  align-self: flex-start;
+  justify-content: flex-start;
   margin: auto;
+}
+
+.twothirdleft {
+  width:66%;
+}
+
+.onethirdright {
+  width: 33%;
+  margin-left: 5px;
 }

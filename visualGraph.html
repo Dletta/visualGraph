@@ -7,34 +7,73 @@
     <link rel="stylesheet" href="vGmain.css">
   </head>
   <body>
-    <img src="visualGraphIcon.svg" width="30" height="30" alt="">
-    <h2>Visualization</h2> <br>
-    <svg width="700" height="500"></svg>
-    <div class="cont" id="detail">
-       <h3> Data Inspector </h3>
+    <!-- Title and Icon -->
+    <img src="visualGraphIcon.svg" width="25" height="25" alt="">
+    <h2>Visualization</h2> <span id="peerList"></span> <br>
+
+    <div class="topbar">
+      <label for="key">Key to Start from:</label>
+      <input id="key" size="32"> <br>
+      <label for="label">Property to be used as Label:</label>
+      <input id="label" class="custom" size="32"> <br>
+      <button type="button" id="startButton">Start</button> <br>
+    </div>
+    <div class="container">
+      <div class="twothirdleft">
+        <!-- Render area -->
+        <svg width="700" height="500"></svg>
+      </div>
+      <div class="onethirdright">
+        <!-- Data Inspection Area -->
+        <div class="cont" id="detail">
+           <h3> Data Inspector </h3>
+        </div>
+      </div>
     </div>
 
+    <!-- End of Page -->
   </body>
+  <!-- Require D3 for Grahping the Graph -->
   <script src="https://d3js.org/d3.v4.min.js"></script>
+  <!-- Needed Gun DB files to hook into a peer -->
   <script src="node_modules/gun/gun.js"></script>
-  <script src="node_modules/gun/lib/promise.js" charset="utf-8"></script>
-  <script src="node_modules/gun/lib/rindexed.js" charset="utf-8"></script>
+  <script src="node_modules/gun/lib/promise.js"></script>
   <script src="node_modules/gun/sea.js"></script>
-
-
+  <!-- Button Logic -->
   <script type="text/javascript">
+  //clear old data
   localStorage.clear();
+  //check if we have used inspector in this session and offer the previous ip as default if true
+  let data = window.sessionStorage.getItem('peers')
+  if(data) {
+    var def = data;
+  } else {
+    var def = '"http://localhost:8080/gun"';
+  }
+  var peers = window.prompt('Please specify the IP of the peer you want to inspect:', def);
+  sessionStorage.setItem('peers', peers);
+  peers = JSON.parse(peers);
 
-  var peers = ['http://localhost:8000/gun'/*'https://notabug.io/gun'*/];
-  var gun = Gun({peers:peers, localStorage:false, indexedDB:true});
+  var gun = Gun({peers:peers, localStorage:false});
 
   var graph = {};
-  </script>
 
-  <script src="visualGraph.js"></script>
-  <script src="abstraction.js"></script>
-  <script type="text/javascript">
-    DFS.explore('test', 'label');
+  var start = function (ev) {
+    console.log('started',ev)
+    var key = document.getElementById('key').value;
+    var label = document.getElementById('label').value;
+    DFS.search(key, label);
+  }
+
+  var but = document.getElementById('startButton');
+  but.addEventListener("click", start);
+
+  var peerList = document.getElementById('peerList');
+  peerList.innerHTML = peers;
+
   </script>
+  <!-- Build and explore graphs -->
+  <script src="visualGraph.js"></script>
+  <!--<script src="abstraction.js"></script>-->
 
 </html>
