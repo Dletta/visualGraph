@@ -81,7 +81,7 @@ node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.no
               .append("circle").attr("r", 2.5).attr('fill', 'red').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended))
               .on("click", detail);
 node.append("title").text((d)=>{return d.id.toUpperCase();});
-label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{return d.label.toUpperCase()}).attr('x', (d)=>{return d.x});
+label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{if(d.label){return d.label.toUpperCase()}}).attr('x', (d)=>{return d.x});
 simulation.nodes(graph.nodes).on("tick", ticked);
 simulation.force("link").links(graph.edges);
 simulation.restart();
@@ -228,6 +228,7 @@ var DFS = (function(){
     for(var item of arr){
       //save label if the prop meets the label
       if(item == label) { tLabel = node[item] }
+      console.log(tLabel);
       // if it's an object, then there is more
       if(typeof node[item] == 'object'){
         //skip nulled items or metadata
