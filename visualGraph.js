@@ -113,11 +113,11 @@ function detail(ev) {
     string += "<div class='item'>KEY: " + key + " SOUL: " + soul;
     string += "<div class='contV'> "
     for(var item of prop) {
-      console.log(item);
       if(item != "_") {
+        if(data[item] == null) {continue};
         //ignore meta data
         string += "<div class='prop'> PROP: " + item;
-        console.log(item, data[item])
+
         if(typeof data[item] == 'object'){
           string += " VALUE: " + data[item]['#'];
         } else {
@@ -206,7 +206,7 @@ var DFS = (function(){
   dfs.node = function(node, key) {
     console.log('called', nodes.size);
     if(!node){console.log('no data:',key, node); dfs.back();return;}
-    var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
+    var soul = Gun.node.soul(node);
     if(soul == start){
       stack.push(soul);
     }
@@ -216,23 +216,24 @@ var DFS = (function(){
     } else {
       nodes.set(soul, {id:soul,label:node[label]})
     }
-
     dfs.edge(u, edges);
   };
 
   dfs.edge = function (node, edges) {
     if(stop){console.log('stopped');return;}
     var temp;
-    var soul = Gun.node.soul(node)/*node['_']['#'] || node['#']*/;
+    var soul = Gun.node.soul(node);
     var tLabel = 'none';
     var arr = Object.keys(node);
-    var i = 1;
-    var l = arr.length;
-    for(;i<l;i++){
-      if(arr[i] == label) { tLabel = node[arr[i]] }
-      if(typeof(node[arr[i]]) == 'object' && node[arr[i]] != null){
-        if(!edges.has(soul+node[arr[i]]['#'])){
-          var temp = node[arr[i]];
+    for(var item of arr){
+      //save label if the prop meets the label
+      if(item == label) { tLabel = node[index] }
+      // if it's an object, then there is more
+      if(typeof node[item] == 'object'){
+        //skip nulled items or metadata
+        if(node[item] == null || item == "_"){continue};
+        if(!edges.has(soul+node[item]['#'])){
+          var temp = node[item];
           break;
         }
       }
