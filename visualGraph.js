@@ -227,7 +227,7 @@ var DFS = (function(){
     var arr = Object.keys(node);
     for(var item of arr){
       //save label if the prop meets the label
-      if(item == label) { tLabel = node[index] }
+      if(item == label) { tLabel = node[item] }
       // if it's an object, then there is more
       if(typeof node[item] == 'object'){
         //skip nulled items or metadata
