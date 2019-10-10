@@ -1,6 +1,6 @@
 {
   "name": "visualgraph",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Graph Visualizer for Gun Database, Abstraction and Schema",
   "main": "main.js",
   "dependencies": {
