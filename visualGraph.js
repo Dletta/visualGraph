@@ -239,7 +239,7 @@ var DFS = (function(){
       stack.push(soul);
     }
     u = node;
-    if(!opt){
+    if(!opt || node[label] == undefined){
       nodes.set(soul, {id:soul,label:key})
     } else {
       nodes.set(soul, {id:soul,label:node[label]})
