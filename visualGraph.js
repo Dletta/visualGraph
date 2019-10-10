@@ -224,6 +224,7 @@ var DFS = (function(){
     console.log('Starting with:',soul);
     if(lbl){opt = true;} else { opt = false;}
     if(lim){limit = lim};
+    console.log(limit);
     label = lbl;
     start = soul;
     stack = [];
