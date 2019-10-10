@@ -78,7 +78,7 @@ console.log('updated');
 svg.selectAll('*').remove();
 link = svg.append("g").attr("class","links").selectAll("line").data(graph.edges).enter().append("line");
 node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.nodes).enter()
-              .append("circle").attr("r", 2.5).attr('fill', 'red').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended))
+              .append("circle").attr("r", 2.5).attr('fill', 'rgb(120,0,0)').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended))
               .on("click", detail);
 node.append("title").text((d)=>{return d.id.toUpperCase();});
 label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{if(d.label){return d.label.toUpperCase()}}).attr('x', (d)=>{return d.x});

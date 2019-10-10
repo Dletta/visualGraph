@@ -11,15 +11,15 @@ h3 {
 }
 
 body {
-  background-color: rgb(40,60,40);
-  color: #fdeced;
+  background-color: rgb(40,44,40);
+  color: rgb(176,157,93);
 }
 
 svg {
   width: 100%;
-  background-color: #6b591d;
-  color: #fdeced;
-  border: solid 2px #fdeced;
+  background-color: rgb(54,54,54);
+  color: rgb(176,157,93);
+  border: solid 2px rgb(176,157,93);
   border-radius: 3px;
   box-shadow: 1px 1px 5px black;
 }
@@ -29,14 +29,14 @@ input {
 }
 
 button {
-  background-color: #6b591d;
-  color: #fdeced;
+  background-color: rgb(54,54,54);
+  color: rgb(176,157,93);
   margin: 10px;
   margin-left: 0px;
   padding: 2px;
   width: 100px;
   height: 40px;
-  border: solid 2px #fdeced;
+  border: solid 2px rgb(176,157,93);
   border-radius: 3px;
   box-shadow: 1px 1px 5px black;
 }
@@ -54,7 +54,7 @@ button {
 text {
   font-family: sans-serif;
   font-size: 10px;
-  fill: #fdeced;
+  fill: rgb(176,157,93);
 }
 
 .cont {
@@ -64,9 +64,9 @@ text {
   align-content: flex-start;
   display: flex;
   flex-direction: row;
-  background-color: #6b591d;
-  color: #fdeced;
-  border: solid 2px #fdeced;
+  background-color: rgb(54,54,54);
+  color: rgb(176,157,93);
+  border: solid 2px rgb(176,157,93);
   border-radius: 3px;
   box-shadow: 1px 1px 5px black;
 }
@@ -75,8 +75,8 @@ text {
   align-content: space-around;
   display: flex;
   flex-direction: column;
-  background-color: #6b591d;
-  color: #fdeced;
+  background-color: rgb(54,54,54);
+  color: rgb(176,157,93);
 }
 
 .container {
@@ -87,7 +87,7 @@ text {
 }
 
 .item {
-  background-color: #6b591d;
+  background-color: rgb(54,54,54);
   padding: 5px;
   margin: 10px;
   border-radius: 5px;
