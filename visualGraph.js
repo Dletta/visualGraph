@@ -220,9 +220,10 @@ var DFS = (function(){
 
   var dfs = {};
 
-  dfs.search = function(soul, lbl){
+  dfs.search = function(soul, lbl, lim){
     console.log('Starting with:',soul);
     if(lbl){opt = true;} else { opt = false;}
+    if(lim){limit = lim};
     label = lbl;
     start = soul;
     stack = [];

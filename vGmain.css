@@ -69,6 +69,7 @@ text {
   border: solid 2px rgb(176,157,93);
   border-radius: 3px;
   box-shadow: 1px 1px 5px black;
+  overflow-y: scroll;
 }
 
 .contV {
