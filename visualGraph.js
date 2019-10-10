@@ -37,7 +37,7 @@ function ticked() {
 }
 
 function makeLabel(data) {
-  console.log(data);
+  //console.log(data);
   var i = 0;
   var l = Object.entries(data).length;
   var string = '';
@@ -69,7 +69,7 @@ label.attr("transform", d3.event.transform);
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 var simulation = d3.forceSimulation();
-simulation.force("charge", d3.forceManyBody().strength(-600));
+simulation.force("charge", d3.forceManyBody().strength(-700));
 simulation.force("link", d3.forceLink().id(function(d) { return d.id; }));
 simulation.force("center", d3.forceCenter(width/2,height/2));
 
@@ -110,7 +110,7 @@ function detail(ev) {
     var soul = Gun.node.soul(data);
     var prop = Object.keys(data);
     var string = "<div class='contV'><h3> Data Inspector </h3>";
-    string += "<div class='item'>KEY: " + key + " SOUL: " + soul;
+    string += "<div class='item'> SOUL: <span id='soul'>" + soul + "</span>";
     string += "<div class='contV'> "
     for(var item of prop) {
       if(item != "_") {
@@ -119,9 +119,10 @@ function detail(ev) {
         string += "<div class='prop'> PROP: " + item;
 
         if(typeof data[item] == 'object'){
-          string += " VALUE: " + data[item]['#'];
+          string += " VALUE: " +  data[item]['#'];
         } else {
-          string += " VALUE: " + data[item];
+          string += " VALUE: "
+          string += '<input id="'+item+'" value="' + data[item] + '">';
         }
         string += "</div>";
       }
@@ -130,6 +131,33 @@ function detail(ev) {
     det.innerHTML =  string;
   });
 }
+
+var saveDetail = function (ev) {
+  var items = document.getElementsByClassName("item");
+  for(var item of items) {
+    var soul = item.firstChild;
+    soul = soul.nextSibling;
+    soul = soul.firstChild;
+    soul = soul.data;
+    var cont = item.firstChild;
+    cont = cont.nextSibling;
+    cont = cont.nextSibling;
+    var propList = cont.children;
+    for(let prop of propList) {
+      let id = prop.firstChild.nextSibling.id;
+      let val = prop.firstChild.nextSibling.value;
+      gun.get(soul).get(id).put(val);
+    }
+  }
+
+  var key = document.getElementById('key').value;
+  var label = document.getElementById('label').value;
+  DFS.search(key, label);
+}
+
+var savB = document.getElementById('save');
+savB.addEventListener("click", saveDetail);
+
 
 /* SECTION: DFS functionality */
 
@@ -204,8 +232,8 @@ var DFS = (function(){
   };
 
   dfs.node = function(node, key) {
-    console.log('called', nodes.size);
-    if(!node){console.log('no data:',key, node); dfs.back();return;}
+    //console.log('called', nodes.size);
+    if(!node){console.error('no data:',key, node); dfs.back();return;}
     var soul = Gun.node.soul(node);
     if(soul == start){
       stack.push(soul);
@@ -228,7 +256,7 @@ var DFS = (function(){
     for(var item of arr){
       //save label if the prop meets the label
       if(item == label) { tLabel = node[item] }
-      console.log(tLabel);
+      //console.log(tLabel);
       // if it's an object, then there is more
       if(typeof node[item] == 'object'){
         //skip nulled items or metadata
@@ -254,7 +282,7 @@ var DFS = (function(){
     edges.set(edgeS+edgeT, {source:edgeS,target:edgeT})
     stack.push(soul)
     u = v;
-    if(nodes.size >= limit){console.log('Reached limit');dfs.render();return;}
+    if(nodes.size >= limit){console.info('Reached limit');dfs.render();return;}
     gun.get(soul).once(dfs.node)
   };
 
@@ -268,7 +296,7 @@ var DFS = (function(){
   };
 
   dfs.render = function () {
-    console.log('Rendering');
+    //console.log('Rendering');
     graph.nodes = util.makeNodes(nodes);
     graph.edges = util.makeEdges(edges);
     update();
