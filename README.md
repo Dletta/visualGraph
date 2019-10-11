@@ -15,6 +15,8 @@ Hit start. Graph is traversed based on connections in your data.
 Navigate graph by click, drag and zoom.
 Click on nodes to display their data.
 
+Demo is found here: https://youtu.be/_JIgU1v6cDc
+
 ### Powered by
 
 Gun DB and d3.js
