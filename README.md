@@ -5,6 +5,7 @@
 Clone the repo, open visualGraph.html in your browser.
 
 Specify the super / node / heroku peer whose data you want to inspect.
+Using JSON formatting e.g. "http://localhost:8080/gun" or '["http://localhost:8080/gun","http://guntest.herokuapp.com"]' (for multiple);
 
 Enter the key/soul of the node you want to focus on.
 If your schema has a label node, specify it, empty will label each node with it’s soul.
