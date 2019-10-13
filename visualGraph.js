@@ -48,12 +48,16 @@ function makeLabel(data) {
   return string;
 }
 
+// INITIALIZING D3 and GLOBALS
+
 var svg = d3.select("svg"),
 width = +svg.attr("width"),
 height = +svg.attr("height");
 var link;
 var node;
 var label;
+var highlightSize = 5;
+var normalSize = 3;
 var zoom = d3.zoom();
 svg.call(zoom.on("zoom", zoomed));
 
@@ -76,7 +80,7 @@ console.log('updated');
 svg.selectAll('*').remove();
 link = svg.append("g").attr("class","links").selectAll("line").data(graph.edges).enter().append("line");
 node = svg.append("g").attr("class", "nodes").selectAll("circles").data(graph.nodes).enter()
-              .append("circle").attr("r", 2.5).attr('fill', 'rgb(120,0,0)').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended))
+              .append("circle").attr("id", (d)=>{return d.id}).attr("r", normalSize).attr('fill', 'rgb(120,0,0)').call(d3.drag().on("start",dragstarted).on("drag", dragged).on("end",dragended))
               .on("click", detail);
 node.append("title").text((d)=>{return d.id.toUpperCase();});
 label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{if(d.label){return d.label.toUpperCase()}}).attr('x', (d)=>{return d.x});
@@ -94,11 +98,25 @@ var coolIt = function () {
 
 /* SECTION: Graph Inspector */
 
+var previous;
+
 function detail(ev) {
   if(ev.id) {
     var key = ev.id;
+    var select = d3.select("#"+key);
+    try {
+      previous.attr('r', normalSize);
+    } catch (e) {console.log(e, "that's okay!!")};
+    select.attr('r', highlightSize);
+    previous = select;
   } else {
     var key = ev.target.id;
+    var select = d3.select("#"+key);
+    try {
+      previous.attr('r', normalSize);
+    } catch (e) {console.log(e, "that's okay!!")};
+    select.attr('r', highlightSize);
+    previous = select;
   }
   gun.get(key).once((data, key) => {
     var det = document.getElementById('detail');
