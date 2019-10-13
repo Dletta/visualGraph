@@ -26,14 +26,11 @@ function ticked() {
 
   node
       .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
-      .attr("transform", function(d) {
-            return "translate(" + d.x + "," + d.y + ")";
-          });
+      .attr("cy", function(d) { return d.y; });
 
   label
       .attr("x", function(d) { return d.x + 5; })
-      .attr("y", function(d) { return d.y + 3; })
+      .attr("y", function(d) { return d.y + 3; });
 }
 
 function makeLabel(data) {
@@ -69,9 +66,10 @@ label.attr("transform", d3.event.transform);
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 var simulation = d3.forceSimulation();
-simulation.force("charge", d3.forceManyBody().strength(-700));
 simulation.force("link", d3.forceLink().id(function(d) { return d.id; }));
 simulation.force("center", d3.forceCenter(width/2,height/2));
+simulation.force("charge", d3.forceManyBody().strength(-700));
+
 
 function update () {
 console.log('updated');
@@ -84,28 +82,25 @@ node.append("title").text((d)=>{return d.id.toUpperCase();});
 label = svg.selectAll('text').data(graph.nodes).enter().append("text").text((d)=>{if(d.label){return d.label.toUpperCase()}}).attr('x', (d)=>{return d.x});
 simulation.nodes(graph.nodes).on("tick", ticked);
 simulation.force("link").links(graph.edges);
+simulation.force("charge", d3.forceManyBody().strength(-700));
+simulation.alphaTarget(0.3);
 simulation.restart();
-
-  function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-    label
-        .attr("x", function(d) { return d.x + 5; })
-        .attr("y", function(d) { return d.y + 3; })
-  }
+setTimeout(coolIt, 1000);
 };
+
+var coolIt = function () {
+  simulation.alphaTarget(0);
+}
 
 /* SECTION: Graph Inspector */
 
 function detail(ev) {
-  gun.get(ev.id).once((data, key) => {
+  if(ev.id) {
+    var key = ev.id;
+  } else {
+    var key = ev.target.id;
+  }
+  gun.get(key).once((data, key) => {
     var det = document.getElementById('detail');
     var soul = Gun.node.soul(data);
     var prop = Object.keys(data);
@@ -115,11 +110,14 @@ function detail(ev) {
     for(var item of prop) {
       if(item != "_") {
         if(data[item] == null) {continue};
-        //ignore meta data
+        // ignore meta data
         string += "<div class='prop'> PROP: " + item;
 
         if(typeof data[item] == 'object'){
-          string += " VALUE: " +  data[item]['#'];
+          string += " VALUE: <span class='link'";
+          string += " id='" + data[item]['#'] + "'";
+          string += " onclick='detail(event)'>" +  data[item]['#'];
+          string += "</span>";
         } else {
           string += " VALUE: "
           string += '<input id="'+item+'" value="' + data[item] + '">';
@@ -143,20 +141,34 @@ var saveDetail = function (ev) {
     cont = cont.nextSibling;
     cont = cont.nextSibling;
     var propList = cont.children;
+    console.log(propList)
     for(let prop of propList) {
-      let id = prop.firstChild.nextSibling.id;
-      let val = prop.firstChild.nextSibling.value;
-      gun.get(soul).get(id).put(val);
+      if(prop.firstChild.nextSibling){
+        let id = prop.firstChild.nextSibling.id;
+        let val = prop.firstChild.nextSibling.value;
+        gun.get(soul).get(id).put(val);
+      }
     }
   }
 
   var key = document.getElementById('key').value;
   var label = document.getElementById('label').value;
+  console.log(key, label);
   DFS.search(key, label);
 }
 
 var savB = document.getElementById('save');
 savB.addEventListener("click", saveDetail);
+
+var start = function (ev) {
+  console.log('started',ev)
+  var key = document.getElementById('key').value;
+  var label = document.getElementById('label').value;
+  DFS.search(key, label);
+}
+
+var but = document.getElementById('startButton');
+but.addEventListener("click", start);
 
 
 /* SECTION: DFS functionality */

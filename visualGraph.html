@@ -59,16 +59,6 @@
 
   var graph = {};
 
-  var start = function (ev) {
-    console.log('started',ev)
-    var key = document.getElementById('key').value;
-    var label = document.getElementById('label').value;
-    DFS.search(key, label);
-  }
-
-  var but = document.getElementById('startButton');
-  but.addEventListener("click", start);
-
   var peerList = document.getElementById('peerList');
   peerList.innerHTML = peers;
 
