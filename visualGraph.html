@@ -37,9 +37,9 @@
   <!-- Require D3 for Grahping the Graph -->
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <!-- Needed Gun DB files to hook into a peer -->
-  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gun@0.2019.930/gun.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gun/lib/promise.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gun@0.2019.930/sea.js"></script>
   <!-- Button Logic -->
   <script type="text/javascript">
   //clear old data
@@ -55,7 +55,7 @@
   sessionStorage.setItem('peers', peers);
   peers = JSON.parse(peers);
 
-  var gun = Gun({peers:peers, localStorage:false});
+  var gun = Gun({peers:peers, radisk:false});
 
   var graph = {};
 
