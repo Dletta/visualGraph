@@ -7,16 +7,21 @@ function CDN(dir){
 	return function(req, res){
 		req.url = (req.url||'').replace(dot,'').replace(slash,'/');
 		if(serve(req, res)){ return } // filters GUN requests!
+		if (req.url.slice(-3) === '.js') {
+			res.writeHead(200, {'Content-Type': 'text/javascript'});
+		}
 		fs.createReadStream(path.join(dir, req.url)).on('error',function(tmp){ // static files!
-			try{ tmp = fs.readFileSync(path.join(dir, 'index.html')) }catch(e){}
-			try{ res.writeHead(200, {'Content-Type': 'text/html'});
-			res.end(tmp+''); }catch(e){} // or default to index
-		}).pipe(res); // stream
+			fs.readFile(path.join(dir, 'index.html'), function(err, tmp){
+				try{ res.writeHead(200, {'Content-Type': 'text/html'});
+				res.end(tmp+''); }catch(e){} // or default to index
+		})}).pipe(res); // stream
 	}
 }
 
 function serve(req, res, next){ var tmp;
-	if(typeof req === 'string'){ return CDN(req) }
+	if(typeof req === 'string'){
+		return CDN(req);
+	}
 	if(!req || !res){ return false }
 	next = next || serve;
 	if(!req.url){ return next() }
@@ -27,19 +32,23 @@ function serve(req, res, next){ var tmp;
 		return true;
 	}
 	if(0 <= req.url.indexOf('gun/')){
-		res.writeHead(200, {'Content-Type': 'text/javascript'});
-		var path = __dirname + '/../' + req.url.split('/').slice(2).join('/'), file;
-		try{file = require('fs').readFileSync(path)}catch(e){}
-		if(file){
-			res.end(file);
+		var path = __dirname + '/../' + req.url.split('/').slice(2).join('/');
+		if('/' === path.slice(-1)){
+			fs.readdir(path, function(err, dir){ res.end((dir || (err && 404))+'') });
 			return true;
 		}
+		var S = +new Date;
+		var rs = fs.createReadStream(path);
+		rs.on('open', function(){ console.STAT && console.STAT(S, +new Date - S, 'serve file open'); rs.pipe(res) });
+		rs.on('error', function(err){ res.end(404+'') });
+		rs.on('end', function(){ console.STAT && console.STAT(S, +new Date - S, 'serve file end') });
+		return true;
 	}
 	if((tmp = req.socket) && (tmp = tmp.server) && (tmp = tmp.route)){ var url;
 		if(tmp = tmp[(((req.url||'').slice(1)).split('/')[0]||'').split('.')[0]]){
 			try{ return tmp(req, res, next) }catch(e){ console.log(req.url+' crashed with '+e) }
 		}
-	} 
+	}
 	return next();
 }
 

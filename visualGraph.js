@@ -103,19 +103,19 @@ var previous;
 function detail(ev) {
   if(ev.id) {
     var key = ev.id;
-    var select = d3.select("#"+key);
+    var select = document.getElementById(key);
     try {
-      previous.attr('r', normalSize);
+      previous.setAttribute('r', normalSize);
     } catch (e) {console.log(e, "that's okay!!")};
-    select.attr('r', highlightSize);
+    select.setAttribute('r', highlightSize);
     previous = select;
   } else {
     var key = ev.target.id;
-    var select = d3.select("#"+key);
+    var select = document.getElementById(key);
     try {
-      previous.attr('r', normalSize);
+      previous.setAttribute('r', normalSize);
     } catch (e) {console.log(e, "that's okay!!")};
-    select.attr('r', highlightSize);
+    select.setAttribute('r', highlightSize);
     previous = select;
   }
   gun.get(key).once((data, key) => {

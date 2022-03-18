@@ -1,8 +1,9 @@
 # pvutils
 
-[![CircleCI](https://circleci.com/gh/PeculiarVentures/pvutils.svg?style=svg)](https://circleci.com/gh/PeculiarVentures/pvutils) [![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/pvutils/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/pvutils?branch=master)
+[![test](https://github.com/PeculiarVentures/pvutils/actions/workflows/test.yml/badge.svg)](https://github.com/PeculiarVentures/pvutils/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/PeculiarVentures/pvutils/badge.svg?branch=master)](https://coveralls.io/github/PeculiarVentures/pvutils?branch=master)
 
-`pvutils` is a set of common utility functions used in various Peculiar Ventures Javascript based projects. 
+`pvutils` is a set of common utility functions used in various Peculiar Ventures Javascript based projects.
 
 Some example capabilities included in `pvutils` include:
 - Converting dates into UTC,

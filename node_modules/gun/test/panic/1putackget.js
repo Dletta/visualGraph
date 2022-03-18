@@ -72,7 +72,7 @@ describe("Put ACK", function(){
 					}
 				}
 				console.log(port, " connect to ", peers);
-				var gun = Gun({file: env.i+'data', peers: peers, web: server});
+				var gun = Gun({file: env.i+'data', peers: peers, web: server, axe: false}); // not working with axe currently!
 				server.listen(port, function(){
 					test.done();
 				});
@@ -82,7 +82,7 @@ describe("Put ACK", function(){
 	});
 
 	it(config.browsers +" browser(s) have joined!", function(){
-		console.log("PLEASE OPEN http://"+ config.IP +":"+ config.port +" IN "+ config.browsers +" BROWSER(S)!");
+		require('./util/open').web(config.browsers, "http://"+ config.IP +":"+ config.port);
 		return browsers.atLeast(config.browsers);
 	});
 
@@ -119,8 +119,8 @@ describe("Put ACK", function(){
 				ref.hear = ref.hear || [];
 				var hear = ref._.root.opt.mesh.hear;
 				ref._.root.opt.mesh.hear = function(raw, peer){
-					var msg = Gun.obj.ify(raw);
 					console.log('hear:', msg);
+					var msg = JSON.parse(raw);
 					hear(raw, peer);
 					ref.hear.push(msg);
 				}
@@ -129,7 +129,7 @@ describe("Put ACK", function(){
 					var yes = say(raw, peer);
 					if(yes === false){ return }
 					console.log("say:", msg, yes);
-					(ref.say || (ref.say = [])).push(Gun.obj.ify(msg));
+					(ref.say || (ref.say = [])).push(JSON.parse(msg));
 				}
 			}
 		}, {acks: config.servers});
@@ -154,7 +154,7 @@ describe("Put ACK", function(){
 			ref.hear = ref.hear || [];
 			var hear = ref._.root.opt.mesh.hear;
 			ref._.root.opt.mesh.hear = function(raw, peer){
-				var msg = Gun.obj.ify(raw);
+				var msg = JSON.parse(raw);
 				console.log('hear:', msg);
 				hear(raw, peer);
 				ref.hear.push(msg);
@@ -188,11 +188,7 @@ describe("Put ACK", function(){
 	});
 
 	after("Everything shut down.", function(){
-		browsers.run(function(){
-			//location.reload();
-			//setTimeout(function(){
-			//}, 15 * 1000);
-		});
+		require('./util/open').cleanup();
 		return servers.run(function(){
 			process.exit();
 		});

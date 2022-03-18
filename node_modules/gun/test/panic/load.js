@@ -27,7 +27,8 @@ var config = {
 // Each device/browser in the distributed system we are testing connects to it.
 // It then coordinates these clients to cause chaos in the distributed system.
 // Cool huh?
-var panic = require('panic-server');
+var panic; try{ panic = require('panic-server') } catch(e){ console.log("PANIC not installed! `npm install panic-server panic-manager panic-client`") }
+
 panic.server().on('request', function(req, res){ // Static server
 	config.route[req.url] && require('fs').createReadStream(config.route[req.url]).pipe(res);
 }).listen(config.port); // Start panic server.
@@ -86,7 +87,7 @@ describe("Load test "+ config.browsers +" browser(s) across "+ config.servers +"
 					res.end("I am "+ env.i +"!");
 				});
 				// Launch the server and start gun!
-				var Gun = require('gun');
+				var Gun; try{ Gun = require('gun') }catch(e){ console.log("GUN not found! You need to link GUN to PANIC. Nesting the `gun` repo inside a `node_modules` parent folder often fixes this.") }
 				// Attach the server to gun.
 				var gun = Gun({file: env.i+'data', web: server, localStorage: false});
 				server.listen(env.config.port + env.i, function(){
@@ -105,8 +106,8 @@ describe("Load test "+ config.browsers +" browser(s) across "+ config.servers +"
 
 	it(config.browsers +" browser(s) have joined!", function(){
 		// Okay! Cool. Now we can move on to the next step...
-		console.log("PLEASE OPEN http://"+ config.IP +":"+ config.port +" IN "+ config.browsers +" BROWSER(S)!");
-		// Which is to manually open up a bunch of browser tabs
+		require('./util/open').web(config.browsers, "http://"+ config.IP +":"+ config.port);
+		// Which is to automatically or manually open up a bunch of browser tabs
 		// and connect to the PANIC server in the same way
 		// the NodeJS servers did.
 
@@ -249,7 +250,7 @@ describe("Load test "+ config.browsers +" browser(s) across "+ config.servers +"
 
 	after("Everything shut down.", function(){
 		// which is to shut down all the browsers.
-		browsers.run(function(){
+		require('./util/open').cleanup() || browsers.run(function(){
 			setTimeout(function(){
 				location.reload();
 			}, 15 * 1000);
